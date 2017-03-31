@@ -13,5 +13,5 @@ Skeleton of participants module
 
 - Herminio García González (@herminiogg)
 - Jose Emilio Labra Gayo (@labra)
-- Daniel Fernández Feito (@Deniff3)
+- Daniel Fernández Feito (@Daniff3)
 - Sergio García Álvarez (@Macana)

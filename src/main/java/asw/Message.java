@@ -1,8 +1,5 @@
-package hello;
+package asw;
 
-/**
- * Created by herminio on 27/2/17.
- */
 public class Message {
 
     private String message;
