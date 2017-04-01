@@ -1,0 +1,15 @@
+Feature: Being able to make a proposal
+	As a logged user
+	I want to write a proposal
+	Because i have an interesting idea to propose
+Scenario: Make a proposal
+
+    Given Im a logged user
+    When i click "Write a proposal"
+    And i choose the topic
+    And i write it
+    And i click "Finish"
+    Then it will be publish
+    And other logged users will see it
+    And it should be able to be voted
+    And it should be able to be commented
