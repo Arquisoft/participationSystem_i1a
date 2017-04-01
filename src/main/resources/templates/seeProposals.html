@@ -3,10 +3,10 @@
 <title>Hola</title>
 </head>
 <body>
-<h1>Welcome</h1>
+<h1>List of proposals</h1>
 <form th:action="@{/send}" th:object="${message}" method="POST">
+	<input type="submit" value="Home" />
     <input type="submit" value="Write a Proposal" />
-    <input type="submit" value="See Proposals" />
 </form>
 </body>
 </html>
