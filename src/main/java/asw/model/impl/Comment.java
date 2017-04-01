@@ -1,34 +1,49 @@
 package asw.model.impl;
 
+import java.util.Date;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import asw.model.Commentable;
 
+@Document(collection = "comments")
 public class Comment implements Commentable{
 	
+	@Id private ObjectId id;
 	private String content;
-	
 	private User user;
+	private Date created;
+	private ObjectId proposalId;
 	
-	private Long id;
+	public Comment(){}
 	
-	public Comment(User user, String content){
+	public Comment(User user, String content, ObjectId proposalId){
 		this.content = content;
 		this.user = user;
+		this.proposalId = proposalId;
+		created = new Date();
+	}
+
+	public ObjectId getId() {
+		return id;
 	}
 
 	public String getContent() {
 		return content;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
-	}
-
 	public User getUser() {
 		return user;
 	}
 
-	public Long getId() {
-		return id;
+	public Date getCreated() {
+		return created;
+	}
+
+	public ObjectId getProposalId() {
+		return proposalId;
 	}
 
 	@Override
@@ -58,7 +73,8 @@ public class Comment implements Commentable{
 
 	@Override
 	public String toString() {
-		return "Comment [content=" + content + ", user=" + user + ", id=" + id + "]";
+		return "Comment [id=" + id + ", content=" + content + ", user=" + user + ", created=" + created
+				+ ", proposalId=" + proposalId + "]";
 	}
-		
+
 }

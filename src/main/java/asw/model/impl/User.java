@@ -1,9 +1,11 @@
 package asw.model.impl;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "users")
 public class User {
 
 	private String firstName;
@@ -16,14 +18,9 @@ public class User {
 	private String identification;
 	private String password;
 	
-	private Set<Comment> comments = new HashSet<>();
-	private Set<Proposal> proposals = new HashSet<>();
-	private Set<Vote> votes = new HashSet<>();
+	@Id private Long id;
 	
-	private Long id;
-	
-	User() {
-	}
+	User(){}
 
 	public User(String identification) {
 		super();
@@ -113,18 +110,6 @@ public class User {
 
 	public Long getId() {
 		return id;
-	}
-
-	public Set<Comment> getComments() {
-		return comments;
-	}
-
-	public Set<Proposal> getProposals() {
-		return proposals;
-	}
-
-	public Set<Vote> getVotes() {
-		return votes;
 	}
 
 	@Override

@@ -1,72 +1,110 @@
 package asw.model.impl;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import asw.model.Commentable;
 import asw.model.types.Topic;
 
+@Document(collection = "proposals")
 public class Proposal implements Commentable{
 
+	@Id private ObjectId id;
+	
+	private User user;
 	private String title;
 	private String description;
 	private Topic topic;
+	private Date created;
+	private int votes;
+	private int minSupport;
 	
-	private long id;
-	
-	private User user;
-	
-	private Set<Vote> votes = new HashSet<>();
+	private Set<String> notAllowedWords = new HashSet<>();
+	private Set<Comment> comments = new HashSet<>();	
+	private Set<User> userVotes = new HashSet<>();
 	
 	Proposal(){}
 	
-	public Proposal(User user, String tit, String desc){
+	public Proposal(User user, String tit, String desc, Topic topic){
 		this.user = user;
 		this.title = tit;
 		this.description = desc;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Topic getTopic() {
-		return topic;
-	}
-
-	public void setTopic(Topic topic) {
 		this.topic = topic;
+		this.votes = 0;
+		this.created = new Date();
+		this.comments = new HashSet<Comment>();
+		this.userVotes = new HashSet<User>();
+	}
+	
+	public Proposal(User user, String tit, String desc, 
+			Topic topic, int minSupport, Set<String> l){
+		this(user, tit, desc, topic);
+		this.minSupport = minSupport;
+		this.notAllowedWords = l;
+	}
+
+	public int getMinSupport() {
+		return minSupport;
+	}
+
+	public void setMinSupport(int minSupport) {
+		this.minSupport = minSupport;
+	}
+
+	public Set<String> getNotAllowedWords() {
+		return notAllowedWords;
+	}
+
+	public void setNotAllowedWords(Set<String> notAllowedWords) {
+		this.notAllowedWords = notAllowedWords;
+	}
+
+	public ObjectId getId() {
+		return id;
 	}
 
 	public User getUser() {
 		return user;
 	}
 
-	public Set<Vote> getVotes() {
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public Topic getTopic() {
+		return topic;
+	}
+
+	public int getVotes() {
 		return votes;
 	}
 
-	public long getId() {
-		return id;
+	public Date getCreated() {
+		return created;
+	}
+
+	public Set<Comment> getComments() {
+		return comments;
+	}
+
+	public Set<User> getUserVotes() {
+		return userVotes;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
@@ -79,15 +117,23 @@ public class Proposal implements Commentable{
 		if (getClass() != obj.getClass())
 			return false;
 		Proposal other = (Proposal) obj;
-		if (id != other.id)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Proposal [title=" + title + ", description=" + description + ", topic=" + topic + ", id=" + id
-				+ ", user=" + user + ", votes=" + votes + "]";
+		return "Proposal [user=" + user + ", title=" + title + ", description=" + description + ", topic=" + topic
+				+ ", created=" + created + ", minSupport=" + minSupport + "]";
+	}
+
+	public void vote(User votant) {
+		userVotes.add(votant);
+		this.votes++;
 	}
 	
 }
