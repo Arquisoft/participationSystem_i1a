@@ -17,4 +17,12 @@ public class UserService {
 	public List<User> getAllUsers(){
 		return uR.findAll();
 	}
+	
+	public void createUser(User user) {
+		uR.insert(user);
+	}
+	
+	public void deleteUser(User user) {
+        uR.delete(user);
+    }
 }

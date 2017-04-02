@@ -8,11 +8,11 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import asw.model.Commentable;
+import asw.model.Interactive;
 import asw.model.types.Topic;
 
 @Document(collection = "proposals")
-public class Proposal implements Commentable{
+public class Proposal implements Interactive{
 
 	@Id private ObjectId id;
 	
@@ -57,7 +57,7 @@ public class Proposal implements Commentable{
 		this.description = desc;
 	}
 	
-	public void seTopic(Topic t)
+	public void setTopic(Topic t)
 	{
 		this.topic = t;
 	}

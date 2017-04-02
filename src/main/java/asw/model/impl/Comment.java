@@ -6,10 +6,10 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import asw.model.Commentable;
+import asw.model.Interactive;
 
 @Document(collection = "comments")
-public class Comment implements Commentable{
+public class Comment implements Interactive{
 	
 	@Id private ObjectId id;
 	private String content;
@@ -17,7 +17,7 @@ public class Comment implements Commentable{
 	private Date created;
 	private ObjectId proposalId;
 	
-	public Comment(){}
+	Comment(){}
 	
 	public Comment(User user, String content, ObjectId proposalId){
 		this.content = content;
