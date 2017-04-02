@@ -8,16 +8,22 @@ import cucumber.api.java.en.And;
 import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
+import asw.model.impl.Proposal;
+import asw.model.impl.User;
+
 @RunWith(Cucumber.class)
 public class ProposeSteps {
+	
+	Proposal proposal;
+	User user;
 
     @Given("^Im a logged user$")
-    public void im_a_logged_user() throws Throwable {
-        throw new PendingException();
+    public void im_a_logged_user(User u) throws Throwable {
+        this.user = u;
     }
 
     @When("^i click \"([^\"]*)\"$")
-    public void i_click_something1(String strArg1) throws Throwable {
+    public void i_click_writeProposal(String strArg1) throws Throwable {
         throw new PendingException();
     }
 
@@ -26,14 +32,19 @@ public class ProposeSteps {
         throw new PendingException();
     }
     
-    @And("^i choose the topic$")
-    public void i_choose_the_topic() throws Throwable {
-        throw new PendingException();
+    @And("^i choose the topic \"([^\"]*)\"$")
+    public void i_choose_the_topic(String topic) throws Throwable {
+        
     }
 
-    @And("^i write it$")
-    public void i_write_it() throws Throwable {
-        throw new PendingException();
+    @And("^i write it \"([^\"]*)\"$")
+    public void i_write_it(String desc) throws Throwable {
+        proposal.setDescription(desc);
+    }
+    
+    @And("^i title it \"([^\"]*)\"$")
+    public void i_title_it(String tit) throws Throwable {
+    	proposal = new Proposal(user, tit);
     }
 
     @And("^i click \"([^\"]*)\"$")

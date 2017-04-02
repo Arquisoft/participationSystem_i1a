@@ -34,6 +34,11 @@ public class User {
 				identification);
 		setDateOfBirth(dateOfBirth);
 	}
+	
+	public User(String firstName, String pass){
+		this.firstName = firstName;
+		this.password = pass;
+	}
 
 	public User(String firstName, String lastName, String email,
 			String Address, String Nationality,

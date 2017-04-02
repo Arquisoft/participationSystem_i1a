@@ -47,7 +47,20 @@ public class Proposal implements Commentable{
 		this.minSupport = minSupport;
 		this.notAllowedWords = l;
 	}
-
+	
+	public Proposal(User user, String tit){
+		this.user = user;
+		this.title = tit;
+	}
+	
+	public void setDescription(String desc){
+		this.description = desc;
+	}
+	
+	public void seTopic(Topic t)
+	{
+		this.topic = t;
+	}
 	public int getMinSupport() {
 		return minSupport;
 	}

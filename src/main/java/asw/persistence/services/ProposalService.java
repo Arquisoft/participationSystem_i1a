@@ -1,5 +1,7 @@
 package asw.persistence.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ public class ProposalService {
 
 	@Autowired
     private ProposalRepository pR;
+	List<Proposal> props;
 	
 	public void createProposal(Proposal proposal) {
         pR.insert(proposal);
@@ -28,5 +31,19 @@ public class ProposalService {
             pR.save(proposal);
         }
     }
+
+	public List<Proposal> getAllProposals() {
+		return pR.findAll();
+	}
+	
+	public Proposal getProposalByTitle(String tit){
+		props = getAllProposals();
+		for(Proposal p : props){
+			if(p.getTitle().equals(tit)){
+				return p;
+			}
+		}
+		return null;
+	}
 	
 }

@@ -6,10 +6,10 @@ Scenario: Make a proposal
 
     Given Im a logged user
     When i click "Write a proposal"
-    And i choose the topic
-    And i write it
+    And i title it as "Football Tournament"
+    And i choose the topic "Sport"
+    And i write "new Footbal Tournament"
     And i click "Finish"
     Then it will be publish
-    And other logged users will see it
     And it should be able to be voted
     And it should be able to be commented
