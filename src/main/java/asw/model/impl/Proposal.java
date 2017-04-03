@@ -9,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import asw.model.Interactive;
+import asw.model.types.NotAllowedWords;
 import asw.model.types.Topic;
 
 @Document(collection = "proposals")
@@ -24,7 +25,8 @@ public class Proposal implements Interactive{
 	private int votes;
 	private int minSupport;
 	
-	private Set<String> notAllowedWords = new HashSet<>();
+	private Set<String> notAllowedWords = NotAllowedWords.getInstance().getSet();
+	
 	private Set<Comment> comments = new HashSet<>();	
 	private Set<User> userVotes = new HashSet<>();
 	
@@ -147,6 +149,17 @@ public class Proposal implements Interactive{
 	public void vote(User votant) {
 		userVotes.add(votant);
 		this.votes++;
+	}
+	
+	public boolean checkNotAllowedWords(){
+		for(String s: notAllowedWords){
+			if(description.contains(s)){
+				System.out.println("Not allowed Word: " + s);
+				return false;
+			}
+		}
+		return true;
+		
 	}
 	
 }
