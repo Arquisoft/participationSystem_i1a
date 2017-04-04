@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -26,6 +27,7 @@ public class Proposal extends Votable {
 	private Date created;
 	private int minSupport;
 	
+	@ElementCollection
 	private Set<String> notAllowedWords = NotAllowedWords.getInstance().getSet();
 	
 	@OneToMany(mappedBy = "proposal")
