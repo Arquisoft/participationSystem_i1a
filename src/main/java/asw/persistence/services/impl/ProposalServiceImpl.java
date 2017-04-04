@@ -7,9 +7,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import asw.model.impl.Association;
 import asw.model.impl.Proposal;
+import asw.model.impl.User;
+import asw.model.impl.Vote;
 import asw.persistence.repositories.ProposalRepository;
 import asw.persistence.services.ProposalService;
+import asw.producers.VoteNotifier;
 
 @Service
 public class ProposalServiceImpl implements ProposalService {
@@ -52,5 +56,12 @@ public class ProposalServiceImpl implements ProposalService {
 	public Proposal findByTitle(String tit) {
 		return repo.findByTitle(tit);
 	}
+
+	@Override
+	public void vote(Proposal proposal, Vote vote, User user) {
+		Association.MakeVote.link(user, vote, proposal);
+		new VoteNotifier().notifyNewVote(vote);
+	}
+
 
 }
