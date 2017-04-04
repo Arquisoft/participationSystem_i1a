@@ -35,6 +35,10 @@ public class Vote implements Serializable {
 		this.user = user;
 	}
 
+	public Votable getVotable() {
+		return votable;
+	}
+
 	void _setVotable(Votable votable) {
 		this.votable = votable;
 	}
