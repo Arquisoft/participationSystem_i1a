@@ -33,8 +33,6 @@ public class Proposal extends Votable {
 	@OneToMany(mappedBy = "proposal")
 	private Set<Comment> comments = new HashSet<>();	
 	
-	private Set<User> userVotes = new HashSet<>();
-	
 	public Proposal(){}
 	
 	public Proposal(User user, String tit, String desc, Topic topic){
@@ -42,7 +40,6 @@ public class Proposal extends Votable {
 		this.topic = topic;
 		this.created = new Date();
 		this.comments = new HashSet<Comment>();
-		this.userVotes = new HashSet<User>();
 	}
 	
 	public Proposal(User user, String tit, String desc, 
@@ -117,10 +114,6 @@ public class Proposal extends Votable {
 	
 	Set<Comment> _getComments(){
 		return this.comments;
-	}
-
-	public Set<User> getUserVotes() {
-		return userVotes;
 	}
 
 	@Override
