@@ -23,7 +23,7 @@ public class Comment extends Votable{
 	
 	private Date created;
 	
-	Comment(){}
+	public Comment(){}
 	
 	public Comment(User user, String content, Proposal proposal){
 		this.content = content;
@@ -34,6 +34,10 @@ public class Comment extends Votable{
 
 	public String getContent() {
 		return content;
+	}
+	
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public User getUser() {
@@ -98,7 +102,5 @@ public class Comment extends Votable{
 		return "Comment [content=" + content + ", user=" + user + ", proposal=" + proposal + ", created=" + created
 				+ "]";
 	}
-
-
 
 }

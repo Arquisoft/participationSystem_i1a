@@ -33,7 +33,7 @@ public class Proposal extends Votable {
 	
 	private Set<User> userVotes = new HashSet<>();
 	
-	Proposal(){}
+	public Proposal(){}
 	
 	public Proposal(User user, String tit, String desc, Topic topic){
 		this(user, tit, desc);
@@ -91,6 +91,11 @@ public class Proposal extends Votable {
 	public String getTitle() {
 		return title;
 	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 
 	public String getDescription() {
 		return description;

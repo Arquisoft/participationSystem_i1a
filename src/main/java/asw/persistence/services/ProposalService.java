@@ -16,4 +16,7 @@ public interface ProposalService {
 	public Proposal findByTitle(String tit);
 	
 	public void vote(Proposal proposal, Vote vote, User user);
+	public Proposal findProposalById(String id);
+	public void updateProposal(Proposal prop);
+	public void insertProposal(Proposal proposal);
 }

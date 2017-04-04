@@ -66,11 +66,9 @@
 						<label for="topic">Topic: </label>
 						<select id="topic" th:field="*{topicAux}" class="form-control">
 							<option selected="true" value="base">Select a topic</option>
-							<option value="ENVIROMENT">
-							<option value="POLITICS">
-							<option value="HEALTHCARE"> 
-							<option value="SECURITY"> 
-							<option value="SPORTS">
+							<option th:each="top:${topics}" th:value="${top}" th:text="${top}"
+                                th:id="${top}">
+                            </option>
 						</select>
 					</div>
 

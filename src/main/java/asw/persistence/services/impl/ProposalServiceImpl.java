@@ -63,5 +63,4 @@ public class ProposalServiceImpl implements ProposalService {
 		new VoteNotifier().notifyNewVote(vote);
 	}
 
-
 }

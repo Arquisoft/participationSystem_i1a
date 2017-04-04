@@ -58,4 +58,16 @@ public class CommentServiceImpl implements CommentService {
 		return repo.findByProposal(proposal);
 	}
 
+	@Override
+	public Comment findByProposalAndId(String proposalId, String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void updateComment(String proposalId, String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

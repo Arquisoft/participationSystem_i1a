@@ -49,7 +49,7 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private Set<Comment> comments = new HashSet<Comment>();
 	
-	User(){}
+	public User(){}
 
 	public User(String identification) {
 		super();

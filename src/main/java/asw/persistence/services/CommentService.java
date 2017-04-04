@@ -15,5 +15,8 @@ public interface CommentService {
 	public List<Comment> findAll();
 	public List<Comment> findByUser(User user);
 	public List<Comment> findByProposal(Proposal proposal);
+	public Comment findByProposalAndId(String proposalId, String id);
+	public void updateComment(String proposalId, String id);
+	public void insertComment(Comment comment);
 	
 }
