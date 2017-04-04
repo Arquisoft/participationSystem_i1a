@@ -22,6 +22,7 @@ public class Proposal extends Votable {
 	private String title;
 	private String description;
 	private Topic topic;
+	private String topicAux;
 	private Date created;
 	private int minSupport;
 	
@@ -134,6 +135,22 @@ public class Proposal extends Votable {
 
 	public void setUser(User user) {
 		this.user = user;		
+	}
+
+	public String getTopicAux() {
+		return topicAux;
+	}
+
+	public void setTopicAux(String topicAux) {
+		this.topicAux = topicAux;
+		if( topicAux == "POLITICS" )
+			this.topic = Topic.POLITICS;
+		if( topicAux == "HEALTHCARE" ) 
+			this.topic = Topic.HEALTHCARE;
+		if( topicAux == "SECURITY" )
+			this.topic = Topic.SECURITY;
+		if( topicAux == "SPORTS" )
+			this.topic = Topic.SPORTS;
 	}
 	
 }

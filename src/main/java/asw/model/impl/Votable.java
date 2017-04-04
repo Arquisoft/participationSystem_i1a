@@ -17,6 +17,8 @@ public abstract class Votable {
 	private Set<Vote> votes = new HashSet<Vote>();
 	
 	private int score;
+	private int upvotes;
+	private int downvotes;
 	
 	public Long getId() {
 		return id;
@@ -36,5 +38,21 @@ public abstract class Votable {
 
 	public void setScore(int numberOfVotes) {
 		this.score = numberOfVotes;
+	}
+
+	public int getUpvotes() {
+		return upvotes;
+	}
+
+	public void setUpvotes(int upvotes) {
+		this.upvotes = upvotes;
+	}
+
+	public int getDownvotes() {
+		return downvotes;
+	}
+
+	public void setDownvotes(int downvotes) {
+		this.downvotes = downvotes;
 	}
 }
