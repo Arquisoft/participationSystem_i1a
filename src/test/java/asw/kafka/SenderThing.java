@@ -1,4 +1,4 @@
-package kafka;
+package asw.kafka;
 
 import static org.junit.Assert.*;
 
@@ -9,8 +9,11 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
@@ -21,6 +24,8 @@ import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class SenderThing {
 	
 	private User diego = new User("Diego","Freijo", "diego@uniovi.es", 

@@ -1,4 +1,4 @@
-package steps;
+package asw.steps;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
