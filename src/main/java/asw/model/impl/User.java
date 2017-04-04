@@ -32,7 +32,10 @@ public class User {
 	private String address;
 	private String nationality;
 	
+	private boolean isAdmin;
+	
 	@Column(unique = true)
+	
 	private String identification;
 	
 	private String password;
@@ -130,6 +133,14 @@ public class User {
 	public String getIdentification() {
 		return identification;
 	}
+	
+	public boolean isAdmin(){
+		return isAdmin;
+	}
+	
+	public void setAdmin(boolean admin){
+		this.isAdmin = admin;
+	}
 
 	public String getPassword() {
 		return password;
@@ -175,7 +186,8 @@ public class User {
 				+ lastName + ", Email=" + email + ", dateOfBirth="
 				+ dateOfBirth + ", Address=" + address
 				+ ", Nationality=" + nationality + ", Identification="
-				+ identification + "]";
+				+ identification 
+				+ ", isAdmin= "+ isAdmin + "]";
 	}
 	
 	public Set<Proposal> getProposals() {
