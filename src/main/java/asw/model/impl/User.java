@@ -202,4 +202,24 @@ public class User {
 		return new HashSet<Vote>(votes);
 	}
 	
+	public void propose(Proposal p) {
+		Association.Propose.link(this, p);
+	}
+	
+	public void vote(Vote vote, Votable votable) {
+		Association.MakeVote.link(this, vote, votable);
+	}
+	
+	public void comment(Proposal proposal, Comment comment) {
+		Association.MakeComment.link(this, comment, proposal);
+	}
+	
+	public void deleteProposal(Proposal proposal) {
+		Association.Propose.unlink(this, proposal);
+	}
+	
+	public void deleteComment(Proposal proposal, Comment comment) {
+		Association.MakeComment.unlink(this, comment, proposal);
+	}
+	
 }

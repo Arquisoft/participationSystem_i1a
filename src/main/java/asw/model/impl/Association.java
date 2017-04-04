@@ -4,7 +4,7 @@ import asw.model.types.*;
 
 public class Association {
 
-	public static class Votation {
+	public static class MakeVote {
 
 		public static void link(User User, Vote vote, Votable votable) {
 			vote._setVotable(votable);
@@ -34,7 +34,7 @@ public class Association {
 		}
 	}
 
-	public static class MakeProposal {
+	public static class Propose {
 
 		public static void link(User user, Proposal proposal) {
 			proposal.setUser(user);

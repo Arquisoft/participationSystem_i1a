@@ -28,7 +28,7 @@ public class Vote implements Serializable {
 
 	public Vote(User user, Votable votable, VoteType voteType) {
 		this.voteType=voteType;
-		Association.Votation.link(user, this, votable);
+		Association.MakeVote.link(user, this, votable);
 	}	
 	
 	public void _setUser(User user) {

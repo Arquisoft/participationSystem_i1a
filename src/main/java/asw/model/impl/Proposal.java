@@ -55,7 +55,7 @@ public class Proposal extends Votable {
 	}
 	
 	public Proposal(User user, String tit) {
-		Association.MakeProposal.link(user, this);
+		Association.Propose.link(user, this);
 		this.title = tit;
 	}
 	
