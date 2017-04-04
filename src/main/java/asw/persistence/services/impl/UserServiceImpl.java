@@ -48,4 +48,10 @@ public class UserServiceImpl implements UserService {
 		//return repo.findAll();
 	}
 
+	@Override
+	public User findUserByLogin(String login) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
