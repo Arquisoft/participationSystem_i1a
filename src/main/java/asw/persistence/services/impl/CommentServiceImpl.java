@@ -61,13 +61,19 @@ public class CommentServiceImpl implements CommentService {
 	@Override
 	public Comment findByProposalAndId(String proposalId, String id) {
 		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Not yet implemented");
 	}
 
 	@Override
 	public void updateComment(String proposalId, String id) {
 		// TODO Auto-generated method stub
-		
+		throw new RuntimeException("Not yet implemented");
+	}
+
+	@Override
+	public void insertComment(Comment comment) {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("Not yet implemented");
 	}
 
 }

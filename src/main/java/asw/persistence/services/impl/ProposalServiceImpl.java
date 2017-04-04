@@ -63,4 +63,22 @@ public class ProposalServiceImpl implements ProposalService {
 		new VoteNotifier().notifyNewVote(vote);
 	}
 
+	@Override
+	public Proposal findProposalById(String id) {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("Not yet implemented");
+	}
+
+	@Override
+	public void updateProposal(Proposal prop) {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("Not yet implemented");
+	}
+
+	@Override
+	public void insertProposal(Proposal proposal) {
+		// TODO Auto-generated method stub
+		throw new RuntimeException("Not yet implemented");
+	}
+
 }
