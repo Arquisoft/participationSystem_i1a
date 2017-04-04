@@ -2,32 +2,34 @@ package asw.model.impl;
 
 import java.util.Date;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-import asw.model.Interactive;
-
-@Document(collection = "comments")
-public class Comment implements Interactive{
+@Entity
+@Table(name = "TComments")
+public class Comment extends Votable{
 	
-	@Id private ObjectId id;
 	private String content;
+	
+	@ManyToOne
+	@JoinColumn(nullable = false)
 	private User user;
+	
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private Proposal proposal;
+	
 	private Date created;
-	private ObjectId proposalId;
 	
 	Comment(){}
 	
-	public Comment(User user, String content, ObjectId proposalId){
+	public Comment(User user, String content, Proposal proposal){
 		this.content = content;
-		this.user = user;
-		this.proposalId = proposalId;
+		this.content = content;
+		Association.MakeComment.link(user, this, proposal);
 		created = new Date();
-	}
-
-	public ObjectId getId() {
-		return id;
 	}
 
 	public String getContent() {
@@ -42,15 +44,25 @@ public class Comment implements Interactive{
 		return created;
 	}
 
-	public ObjectId getProposalId() {
-		return proposalId;
+	public Proposal getProposal() {
+		return proposal;
+	}
+	
+	void _setUser(User user) {
+		this.user = user;
+	}
+	
+	void _setProposal(Proposal proposal) {
+		this.proposal = proposal;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		int result = super.hashCode();
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result + ((proposal == null) ? 0 : proposal.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
 
@@ -58,23 +70,35 @@ public class Comment implements Interactive{
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Comment other = (Comment) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (content == null) {
+			if (other.content != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!content.equals(other.content))
+			return false;
+		if (proposal == null) {
+			if (other.proposal != null)
+				return false;
+		} else if (!proposal.equals(other.proposal))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Comment [id=" + id + ", content=" + content + ", user=" + user + ", created=" + created
-				+ ", proposalId=" + proposalId + "]";
+		return "Comment [content=" + content + ", user=" + user + ", proposal=" + proposal + ", created=" + created
+				+ "]";
 	}
+
+
 
 }

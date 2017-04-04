@@ -1,30 +1,38 @@
 package steps;
 
-import cucumber.api.PendingException;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.And;
-import cucumber.api.junit.Cucumber;
-
 import java.util.List;
 
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
 import asw.model.impl.User;
+import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;
+import cucumber.api.PendingException;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 public class CommentSteps {
 
-	UserService us = new UserService();
-	ProposalService ps = new ProposalService();
-	List<Proposal> proposals = ps.getAllProposals();
+	@Autowired
+	UserService us;
+	
+	@Autowired
+	ProposalService ps;
+	
+	@Autowired
+	CommentService cs;
+	
+	List<Proposal> proposals;
 	Proposal proposal;
-	List<User> users = us.getAllUsers();
+	List<User> users = us.findAll();
 	User user;
 	Comment comment;
 	
@@ -48,7 +56,7 @@ public class CommentSteps {
 
     @And("^i choose one \"([^\"]*)\"$")
     public void i_choose_one(String tit) throws Throwable {
-    	Proposal p = ps.getProposalByTitle(tit);
+    	Proposal p = ps.findByTitle(tit);
         if(p != null){
         	this.proposal = p;
         }
@@ -61,7 +69,7 @@ public class CommentSteps {
 
     @And("^i write it \"([^\"]*)\"$")
     public void i_write_it(String content) throws Throwable {
-        this.comment = new Comment(user, content, proposal.getId());
+        this.comment = new Comment(user, content, proposal);
     }
 
     @And("^it should be able to be commented$")

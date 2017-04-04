@@ -4,40 +4,39 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-import asw.model.Interactive;
 import asw.model.types.NotAllowedWords;
 import asw.model.types.Topic;
 
-@Document(collection = "proposals")
-public class Proposal implements Interactive{
-
-	@Id private ObjectId id;
+@Entity
+@Table(name="TProposals")
+public class Proposal extends Votable {
 	
+	@ManyToOne
 	private User user;
+	
 	private String title;
 	private String description;
 	private Topic topic;
 	private Date created;
-	private int votes;
 	private int minSupport;
 	
 	private Set<String> notAllowedWords = NotAllowedWords.getInstance().getSet();
 	
+	@OneToMany(mappedBy = "proposal")
 	private Set<Comment> comments = new HashSet<>();	
+	
 	private Set<User> userVotes = new HashSet<>();
 	
 	Proposal(){}
 	
 	public Proposal(User user, String tit, String desc, Topic topic){
-		this.user = user;
-		this.title = tit;
-		this.description = desc;
+		this(user, tit, desc);
 		this.topic = topic;
-		this.votes = 0;
 		this.created = new Date();
 		this.comments = new HashSet<Comment>();
 		this.userVotes = new HashSet<User>();
@@ -50,8 +49,13 @@ public class Proposal implements Interactive{
 		this.notAllowedWords = l;
 	}
 	
-	public Proposal(User user, String tit){
-		this.user = user;
+	public Proposal(User user, String tit, String description){
+		this(user, tit);
+		this.description = description;
+	}
+	
+	public Proposal(User user, String tit) {
+		Association.MakeProposal.link(user, this);
 		this.title = tit;
 	}
 	
@@ -59,10 +63,10 @@ public class Proposal implements Interactive{
 		this.description = desc;
 	}
 	
-	public void setTopic(Topic t)
-	{
+	public void setTopic(Topic t) {
 		this.topic = t;
 	}
+	
 	public int getMinSupport() {
 		return minSupport;
 	}
@@ -77,10 +81,6 @@ public class Proposal implements Interactive{
 
 	public void setNotAllowedWords(Set<String> notAllowedWords) {
 		this.notAllowedWords = notAllowedWords;
-	}
-
-	public ObjectId getId() {
-		return id;
 	}
 
 	public User getUser() {
@@ -99,16 +99,16 @@ public class Proposal implements Interactive{
 		return topic;
 	}
 
-	public int getVotes() {
-		return votes;
-	}
-
 	public Date getCreated() {
 		return created;
 	}
 
 	public Set<Comment> getComments() {
-		return comments;
+		return new HashSet<Comment>(comments);
+	}
+	
+	Set<Comment> _getComments(){
+		return this.comments;
 	}
 
 	public Set<User> getUserVotes() {
@@ -116,39 +116,9 @@ public class Proposal implements Interactive{
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Proposal other = (Proposal) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
-	@Override
 	public String toString() {
 		return "Proposal [user=" + user + ", title=" + title + ", description=" + description + ", topic=" + topic
 				+ ", created=" + created + ", minSupport=" + minSupport + "]";
-	}
-
-	public void vote(User votant) {
-		userVotes.add(votant);
-		this.votes++;
 	}
 	
 	public boolean checkNotAllowedWords(){
@@ -160,6 +130,10 @@ public class Proposal implements Interactive{
 		}
 		return true;
 		
+	}
+
+	public void setUser(User user) {
+		this.user = user;		
 	}
 	
 }

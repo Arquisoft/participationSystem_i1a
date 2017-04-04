@@ -2,27 +2,18 @@ package asw.persistence.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import asw.persistence.repositories.CommentRepository;
 import asw.model.impl.Comment;
+import asw.model.impl.Proposal;
+import asw.model.impl.User;
 
-@Service
-public class CommentService {
-
-	@Autowired
-    private CommentRepository cR;
-
-    public void createComment(Comment comment) {
-        cR.insert(comment);
-    }
-    
-    public void deleteComment(Comment comment) {
-    	cR.delete(comment);
-    }
+public interface CommentService {
 	
-    public List<Comment> getAllComments() {
-		return cR.findAll();
-	}
+	public void save(Comment comment);
+	public boolean checkExists(Long id);
+	public void delete(Comment comment);
+	
+	public List<Comment> findAll();
+	public List<Comment> findByUser(User user);
+	public List<Comment> findByProposal(Proposal proposal);
+	
 }

@@ -1,28 +1,27 @@
 package steps;
 
-import cucumber.api.PendingException;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.When;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.And;
-import cucumber.api.junit.Cucumber;
-
 import java.util.List;
-import java.util.Set;
-
-import javax.validation.constraints.AssertTrue;
 
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import asw.model.impl.Proposal;
 import asw.model.impl.User;
 import asw.persistence.services.UserService;
+import cucumber.api.PendingException;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 public class VoteSteps {
 	
-	UserService us = new UserService();
-	List<User> users = us.getAllUsers();
+	@Autowired
+	UserService us;
+	@Autowired
+	List<User> users;
 	User user;
 
     @Given("^Im a logged user$")
@@ -37,7 +36,7 @@ public class VoteSteps {
 
     @Then("^it will be voted$")
     public void it_will_be_voted(Proposal p) throws Throwable {
-        p.vote(user);
+        p.addVote();
     }
 
     @And("^other logged users will see it$")

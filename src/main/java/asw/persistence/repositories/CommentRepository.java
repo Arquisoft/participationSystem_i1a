@@ -1,14 +1,18 @@
 package asw.persistence.repositories;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import asw.model.impl.Comment;
+import asw.model.impl.Proposal;
+import asw.model.impl.User;
+
 
 @Repository
-public interface CommentRepository extends MongoRepository<Comment, ObjectId> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-	//Methods
-	
+	public List<Comment> findByProposal(Proposal p);
+	public List<Comment> findByUser(User u);
 }

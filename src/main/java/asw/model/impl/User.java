@@ -2,23 +2,49 @@ package asw.model.impl;
 
 import java.util.Date;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.HashSet;
+import java.util.Set;
 
-@Document(collection = "users")
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "TUsers")
 public class User {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
 	private String firstName;
 	private String lastName;
-	private String Email;
+	
+	@Column(unique = true, nullable = false)
+	private String email;
+	
 	private Date dateOfBirth;
 
-	private String Address;
-	private String Nationality;
+	private String address;
+	private String nationality;
+	
+	@Column(unique = true)
 	private String identification;
+	
 	private String password;
 	
-	@Id private Long id;
+	@OneToMany(mappedBy = "user")
+	private Set<Proposal> proposals = new HashSet<Proposal>();
+	
+	@OneToMany(mappedBy = "user")
+	private Set<Vote> votes = new HashSet<>();
+
+	@OneToMany(mappedBy = "user")
+	private Set<Comment> comments = new HashSet<Comment>();
 	
 	User(){}
 
@@ -47,9 +73,9 @@ public class User {
 		this(identification);
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.Email = email;
-		this.Address = Address;
-		this.Nationality = Nationality;
+		this.email = email;
+		this.address = Address;
+		this.nationality = Nationality;
 
 	}
 
@@ -70,11 +96,11 @@ public class User {
 	}
 
 	public String getEmail() {
-		return Email;
+		return email;
 	}
 
 	public void setEmail(String email) {
-		Email = email;
+		this.email = email;
 	}
 
 	public Date getDateOfBirth() {
@@ -86,19 +112,19 @@ public class User {
 	}
 
 	public String getAddress() {
-		return Address;
+		return address;
 	}
 
 	public void setAddress(String address) {
-		Address = address;
+		this.address = address;
 	}
 
 	public String getNationality() {
-		return Nationality;
+		return nationality;
 	}
 
 	public void setNationality(String nationality) {
-		Nationality = nationality;
+		this.nationality = nationality;
 	}
 
 	public String getIdentification() {
@@ -146,10 +172,34 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [firstName=" + firstName + ", lastName="
-				+ lastName + ", Email=" + Email + ", dateOfBirth="
-				+ dateOfBirth + ", Address=" + Address
-				+ ", Nationality=" + Nationality + ", Identification="
+				+ lastName + ", Email=" + email + ", dateOfBirth="
+				+ dateOfBirth + ", Address=" + address
+				+ ", Nationality=" + nationality + ", Identification="
 				+ identification + "]";
+	}
+	
+	public Set<Proposal> getProposals() {
+		return new HashSet<Proposal>(proposals);
+	}
+
+	Set<Proposal> _getProposals() {
+		return proposals;
+	}
+
+	public Set<Comment> getComments() {
+		return new HashSet<Comment>(comments);
+	}
+
+	Set<Comment> _getComments() {
+		return comments;
+	}
+
+	Set<Vote> _getVotes() {
+		return votes;
+	}
+	
+	public Set<Vote> getVotes() {
+		return new HashSet<Vote>(votes);
 	}
 	
 }
