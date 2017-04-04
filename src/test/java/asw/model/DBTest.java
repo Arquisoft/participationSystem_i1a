@@ -1,4 +1,4 @@
-package model;
+package asw.model;
 
 import static org.junit.Assert.*;
 
@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -37,6 +38,8 @@ public class DBTest {
 	private Comment comment1 = new Comment(diego, "content of the comment", prop);
 	private Comment comment2 = new Comment(dani, "content of the comment 2", prop);
 	
+    @Autowired
+    private TestEntityManager entityManager;
 	
 	@Autowired
 	private UserService uS;
