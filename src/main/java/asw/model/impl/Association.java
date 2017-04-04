@@ -11,9 +11,9 @@ public class Association {
 			vote._setUser(User);
 			
 			if(vote.getVoteType().equals(VoteType.POSITIVE))
-				votable.setNumberOfVotes(votable.getNumberOfVotes() + 1);
+				votable.setScore(votable.getScore() + 1);
 			else if(vote.getVoteType().equals(VoteType.NEGATIVE))
-				votable.setNumberOfVotes(votable.getNumberOfVotes() - 1);
+				votable.setScore(votable.getScore() - 1);
 			
 			votable._getVotes().add(vote);
 			User._getVotes().add(vote);
@@ -27,9 +27,9 @@ public class Association {
 			vote._setUser(null);
 
 			if(vote.getVoteType().equals(VoteType.POSITIVE))
-				proposal.setNumberOfVotes(proposal.getNumberOfVotes() - 1);
+				proposal.setScore(proposal.getScore() - 1);
 			else if(vote.getVoteType().equals(VoteType.NEGATIVE))
-				proposal.setNumberOfVotes(proposal.getNumberOfVotes() + 1);
+				proposal.setScore(proposal.getScore() + 1);
 			
 		}
 	}

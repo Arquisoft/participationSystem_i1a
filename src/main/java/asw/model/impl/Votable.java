@@ -16,7 +16,7 @@ public abstract class Votable {
 	@OneToMany(mappedBy = "votable")
 	private Set<Vote> votes = new HashSet<Vote>();
 	
-	private int numberOfVotes;
+	private int score;
 	
 	public Long getId() {
 		return id;
@@ -26,19 +26,15 @@ public abstract class Votable {
 		return votes;
 	}
 	
-	public int getNumberOfVotes() {
-		return numberOfVotes;
+	public int getScore() {
+		return score;
 	}
 	
 	public Set<Vote> getVotes(){
 		return new HashSet<Vote>(votes);
 	}
 
-	public void setNumberOfVotes(int numberOfVotes) {
-		this.numberOfVotes = numberOfVotes;
-	}
-	
-	public void addVote(){
-		numberOfVotes++;
+	public void setScore(int numberOfVotes) {
+		this.score = numberOfVotes;
 	}
 }
