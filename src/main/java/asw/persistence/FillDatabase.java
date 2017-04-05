@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 
 import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
@@ -12,25 +13,29 @@ import asw.model.types.Topic;
 import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;
+import asw.persistence.services.VoteService;
 
+@Service
 public class FillDatabase {
 
-	private static User u1, u2, u3, u4, uadmin;
-	private static Proposal p1, p2, p3, p4, p5;
-	private static Comment c1, c2, c3, c4, c5, c6;
+	private User u1, u2, u3, u4, uadmin;
+	private Proposal p1, p2, p3, p4, p5;
+	private Comment c1, c2, c3, c4, c5, c6;
 	
 	@Autowired
-	private static UserService uS;
+	private UserService uS;
 	@Autowired
-	private static CommentService cS;
+	private CommentService cS;
 	@Autowired
-	private static ProposalService pS;
+	private ProposalService pS;
+	@Autowired
+	private VoteService vS;
 	
-	public static void fill() {
-		
-		uS.clearTable();
+	public void fill() {
+		vS.clearTable();
 		cS.clearTable();
 		pS.clearTable();
+		uS.clearTable();
 		initializeData();
 		
 		try {
@@ -42,13 +47,13 @@ public class FillDatabase {
 		}
 	}
 	
-	private static void initializeData() {
+	private void initializeData() {
 		initializeUsers();
 		initializeProposals();
 		initializeComments();
 	}
 	
-	private static void initializeUsers() {
+	private void initializeUsers() {
 		u1 = new User("Daniel", 	 "Fernández Feito", "email1", new Date(), "Address1", "Spain", 	   "1111");
 		u2 = new User("Diego Roger", "Freijó Álvarez",  "email2", new Date(), "Address2", "Spain", 	   "2222");
 		u3 = new User("Sergio", 	 "García Álvarez",  "email3", new Date(), "Address3", "Australia", "3333");		
@@ -59,7 +64,7 @@ public class FillDatabase {
 		u4.setPassword("password");
 	}
 
-	private static void initializeProposals() {
+	private void initializeProposals() {
 		p1 = new Proposal(u1, "Title1", "Description1", Topic.HEALTHCARE);
 		p2 = new Proposal(u2, "Title2", "Description2", Topic.ENVIROMENT);
 		p3 = new Proposal(u3, "Title3", "Description3", Topic.POLITICS);
@@ -67,7 +72,7 @@ public class FillDatabase {
 		p5 = new Proposal(u4, "Title5", "Description5", Topic.SPORTS);
 	}
 
-	private static void initializeComments() {
+	private void initializeComments() {
 		c1 = new Comment(u1, "Comment body 1", p1);
 		c2 = new Comment(u2, "Comment body 2", p2);
 		c3 = new Comment(u3, "Comment body 3", p3);
@@ -76,14 +81,14 @@ public class FillDatabase {
 		c6 = new Comment(u3, "Comment body 6", p5);
 	}
 
-	private static void addUsers() {
+	private void addUsers() {
 		uS.save(u1);
 		uS.save(u2);
 		uS.save(u3);
 		uS.save(u4);
 	}
 
-	private static void addProposals() {
+	private void addProposals() {
 		pS.save(p1);
 		pS.save(p2);
 		pS.save(p3);
@@ -91,7 +96,7 @@ public class FillDatabase {
 		pS.save(p5);
 	}
 
-	private static void addComments() {
+	private void addComments() {
 		cS.save(c1);
 		cS.save(c2);
 		cS.save(c3);

@@ -45,6 +45,9 @@ public class MainController {
     @Autowired
     private VoteService vs;
     
+    @Autowired
+    private FillDatabase fd;
+    
 /**
     @RequestMapping("/")
     public String landing(Model model) {
@@ -61,7 +64,7 @@ public class MainController {
     
     @RequestMapping("/")
 	public ModelAndView landing(Model model) {
-    	FillDatabase.fill();
+    	fd.fill();
 		return new ModelAndView("redirect:" + "/login");
 	}
 

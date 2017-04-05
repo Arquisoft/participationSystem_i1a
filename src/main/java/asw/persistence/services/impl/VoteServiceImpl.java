@@ -54,4 +54,9 @@ public class VoteServiceImpl implements VoteService {
 		return repo.findByVotable(v);
 	}
 
+	@Override
+	public void clearTable() {
+		repo.deleteAll();
+	}
+
 }

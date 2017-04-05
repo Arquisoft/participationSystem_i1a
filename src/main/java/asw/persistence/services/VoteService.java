@@ -14,4 +14,6 @@ public interface VoteService {
 	public List<Vote> findAll();
 	public List<Vote> findByUser(User user);
 	public List<Vote> findByVotable(Votable v);
+	
+	public void clearTable();
 }
