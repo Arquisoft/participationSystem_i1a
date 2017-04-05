@@ -60,6 +60,9 @@ public class DBTest {
 	}
 	
 	private void addData() {
+		cS.clearTable();
+		pS.clearTable();
+		uS.clearTable();
 		uS.save(diego);
 		uS.save(dani);
 		pS.save(prop);
