@@ -13,10 +13,12 @@ public interface CommentService {
 	public void delete(Comment comment);
 	
 	public List<Comment> findAll();
+	public Comment findById(Long id);
 	public List<Comment> findByUser(User user);
 	public List<Comment> findByProposal(Proposal proposal);
-	public Comment findByProposalAndId(String proposalId, String id);
-	public void updateComment(String proposalId, String id);
-	public void insertComment(Comment comment);
+	public Comment findByProposalAndId(Long proposalId, Long id) throws Exception;
+	
+	public void updateComment(Long proposalId, Comment comment);
+	
 	
 }

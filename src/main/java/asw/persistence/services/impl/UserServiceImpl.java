@@ -37,6 +37,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User findById(Long id) {
+		return repo.findById(id);
+	}
+	
+	@Override
 	public List<User> findAll() {
 		List<User> users = new ArrayList<>();
 		if (repo.findAll() != null) {
@@ -45,7 +50,6 @@ public class UserServiceImpl implements UserService {
 				users.add(it.next());
 		}
 		return users;
-		//return repo.findAll();
 	}
 
 	@Override

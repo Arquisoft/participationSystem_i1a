@@ -16,7 +16,6 @@ public abstract class Votable {
 	@OneToMany(mappedBy = "votable")
 	private Set<Vote> votes = new HashSet<Vote>();
 	
-	private int score;
 	private int upvotes;
 	private int downvotes;
 	
@@ -29,15 +28,11 @@ public abstract class Votable {
 	}
 	
 	public int getScore() {
-		return score;
+		return upvotes - downvotes;
 	}
 	
 	public Set<Vote> getVotes(){
 		return new HashSet<Vote>(votes);
-	}
-
-	public void setScore(int numberOfVotes) {
-		this.score = numberOfVotes;
 	}
 
 	public int getUpvotes() {
@@ -54,5 +49,21 @@ public abstract class Votable {
 
 	public void setDownvotes(int downvotes) {
 		this.downvotes = downvotes;
+	}
+
+	public void incrementUpvotes() {
+		this.upvotes+=1;
+	}
+
+	public void incrementDownvotes() {
+		this.downvotes+=1;
+	}
+
+	public void decrementUpvotes() {
+		this.upvotes-=1;
+	}
+
+	public void decrementDownvotes() {
+		this.downvotes-=1;
 	}
 }

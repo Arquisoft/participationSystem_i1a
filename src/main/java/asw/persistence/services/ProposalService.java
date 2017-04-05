@@ -3,8 +3,6 @@ package asw.persistence.services;
 import java.util.List;
 
 import asw.model.impl.Proposal;
-import asw.model.impl.User;
-import asw.model.impl.Vote;
 
 public interface ProposalService {
 	
@@ -14,9 +12,8 @@ public interface ProposalService {
 	
 	public List<Proposal> findAll();
 	public Proposal findByTitle(String tit);
+	public Proposal findById(Long id);
 	
-	public void vote(Proposal proposal, Vote vote, User user);
-	public Proposal findProposalById(String id);
 	public void updateProposal(Proposal prop);
-	public void insertProposal(Proposal proposal);
+	
 }

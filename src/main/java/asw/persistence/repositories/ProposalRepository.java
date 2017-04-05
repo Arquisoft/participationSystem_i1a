@@ -11,4 +11,5 @@ public interface ProposalRepository extends JpaRepository<Proposal, Long>{
 	
 	public Proposal findByUser(User u);
 	public Proposal findByTitle(String title);
+	public Proposal findById(long id);
 }
