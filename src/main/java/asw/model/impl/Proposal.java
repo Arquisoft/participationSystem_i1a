@@ -35,6 +35,17 @@ public class Proposal extends Votable {
 	
 	public Proposal(){}
 	
+	public Proposal(User user, String tit) {
+		super();
+		Association.Propose.link(user, this);
+		this.title = tit;
+	}
+	
+	public Proposal(User user, String tit, String description){
+		this(user, tit);
+		this.description = description;
+	}
+	
 	public Proposal(User user, String tit, String desc, Topic topic){
 		this(user, tit, desc);
 		this.topic = topic;
@@ -47,16 +58,6 @@ public class Proposal extends Votable {
 		this(user, tit, desc, topic);
 		this.minSupport = minSupport;
 		this.notAllowedWords = l;
-	}
-	
-	public Proposal(User user, String tit, String description){
-		this(user, tit);
-		this.description = description;
-	}
-	
-	public Proposal(User user, String tit) {
-		Association.Propose.link(user, this);
-		this.title = tit;
 	}
 	
 	public void setDescription(String desc){

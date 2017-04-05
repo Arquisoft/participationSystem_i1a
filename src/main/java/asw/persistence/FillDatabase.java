@@ -86,6 +86,7 @@ public class FillDatabase {
 		uS.save(u2);
 		uS.save(u3);
 		uS.save(u4);
+		uS.save(uadmin);
 	}
 
 	private void addProposals() {
