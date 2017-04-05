@@ -9,9 +9,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import asw.model.impl.User;
 import asw.persistence.services.UserService;
 
-@ManagedBean
-public class UserLoginService implements UserDetailsService {
-
+//@ManagedBean
+public class UserLoginService { 
+				//implements UserDetailsService {
+/**
 	private UserService us;
 	
 	@Override
@@ -22,5 +23,5 @@ public class UserLoginService implements UserDetailsService {
 		}
 		throw new UsernameNotFoundException("Username not found");
 	}
-
+*/
 }

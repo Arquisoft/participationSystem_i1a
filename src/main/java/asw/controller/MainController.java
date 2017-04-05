@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,20 +14,26 @@ import org.springframework.web.servlet.ModelAndView;
 import asw.model.impl.Association;
 import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
+import asw.model.impl.User;
 import asw.model.impl.Vote;
 import asw.model.types.Topic;
 import asw.model.types.VoteType;
 import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
+import asw.persistence.services.UserService;
 import asw.persistence.services.VoteService;
 import asw.producers.KafkaProducer;
-import asw.security.MyUserDetails;
 
 @Controller
 public class MainController {
 
+	private User loggedinUser;
+	
     @Autowired
     private KafkaProducer kafkaProducer;
+
+    @Autowired
+    private UserService us;
     
     @Autowired
     private ProposalService ps;
@@ -60,20 +65,24 @@ public class MainController {
 
 	@RequestMapping("/login")
 	public String login(Model model) {
+		model.addAttribute("loginUser", new User());
 		return "login";
 	}
 	
 	@RequestMapping("/loginCheck")
-	public String loginCheck(Model model){
-		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
-														getAuthentication().getPrincipal();
+	public String loginCheck(Model model,
+			@ModelAttribute User loginUser){
 		
-		if (user.getUser().isAdmin()) {
-			return "admin";
+		loggedinUser = us.findUserByLoginAndPassword(loginUser.getLogin(), loginUser.getPassword());
+		
+		if(loggedinUser != null){
+			if (loggedinUser.isAdmin()) {
+				return "admin";
+			}
+			model.addAttribute("createProposal", new Proposal());
+			return "user";
 		}
-		model.addAttribute("createProposal", new Proposal());
-
-		return "user";
+		return "login";
 	}
 /*
 	@RequestMapping("/user")
@@ -120,13 +129,11 @@ public class MainController {
 
 	@RequestMapping("/upvoteProposal/{id}")
 	public String upvoteProposal(Model model, @PathVariable("id") Long id) {
-		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
-				getAuthentication().getPrincipal();	
 		
 		Proposal prop = ps.findById(id);
 		
-		if (prop != null && user != null) {
-			Vote v = new Vote(user.getUser(), prop, VoteType.POSITIVE);
+		if (prop != null && loggedinUser != null) {
+			Vote v = new Vote(loggedinUser, prop, VoteType.POSITIVE);
 			vs.save(v);
 			ps.updateProposal(prop);
 		}
@@ -135,13 +142,11 @@ public class MainController {
 
 	@RequestMapping("/downvoteProposal/{id}")
 	public String downvoteProposal(Model model, @PathVariable("id") Long id) {
-		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
-				getAuthentication().getPrincipal();	
 		
 		Proposal prop = ps.findById(id);
 		
-		if (prop != null && user != null) {
-			Vote v = new Vote(user.getUser(), prop, VoteType.NEGATIVE);
+		if (prop != null && loggedinUser != null) {
+			Vote v = new Vote(loggedinUser, prop, VoteType.NEGATIVE);
 			vs.save(v);
 			ps.updateProposal(prop);
 		}
@@ -155,10 +160,8 @@ public class MainController {
 		Comment comment = new Comment();
 		comment.setContent(createComment.getContent());
 		Proposal p = ps.findById(id);
-		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
-				getAuthentication().getPrincipal();	
-		
-		Association.MakeComment.link(user.getUser(), comment, p);
+				
+		Association.MakeComment.link(loggedinUser, comment, p);
 		
 		cs.save(comment);
 		kafkaProducer.send("createdComment", "created comment");
@@ -171,11 +174,9 @@ public class MainController {
 			@PathVariable("id") Long id) throws Exception {
 		
 		Comment c = cs.findByProposalAndId(proposalId, id);
-		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
-				getAuthentication().getPrincipal();	
 		
-		if (c != null && user.getUser() != null) {
-			Vote v = new Vote (user.getUser(), c, VoteType.POSITIVE);
+		if (c != null && loggedinUser != null) {
+			Vote v = new Vote (loggedinUser, c, VoteType.POSITIVE);
 			vs.save(v);
 			cs.updateComment(proposalId, c);
 		}
@@ -189,11 +190,9 @@ public class MainController {
 			@PathVariable("id") Long id) throws Exception {
 		
 		Comment c = cs.findByProposalAndId(proposalId, id);
-		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
-				getAuthentication().getPrincipal();	
 		
-		if (c != null && user.getUser() != null) {
-			Vote v = new Vote(user.getUser(), c, VoteType.NEGATIVE);
+		if (c != null && loggedinUser != null) {
+			Vote v = new Vote(loggedinUser, c, VoteType.NEGATIVE);
 			vs.save(v);
 			cs.updateComment(proposalId, c);
 		}

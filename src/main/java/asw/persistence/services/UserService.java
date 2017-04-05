@@ -15,5 +15,6 @@ public interface UserService {
 	
 	public User findUserByLogin(String login);
 	public void clearTable();
+	public User findUserByLoginAndPassword(String login, String password);
 	
 }

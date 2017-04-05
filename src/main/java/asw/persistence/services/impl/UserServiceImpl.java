@@ -54,13 +54,23 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findUserByLogin(String login) {
-		// TODO Auto-generated method stub
-		return null;
+		return repo.findByLogin(login);
 	}
 	
 	@Override
 	public void clearTable() {
 		repo.deleteAll();
+	}
+
+	@Override
+	public User findUserByLoginAndPassword(String login, String password) {
+		User u = repo.findByLogin(login);
+		
+		if(password.equals(u.getPassword())){
+			return u;
+		}
+		
+		return null;
 	}
 
 }

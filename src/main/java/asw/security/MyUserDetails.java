@@ -7,8 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import asw.model.impl.User;
 
-public class MyUserDetails implements UserDetails {
-
+public class MyUserDetails {
+			//implements UserDetails {
+/**
 	private static final long serialVersionUID = 1L;
 	private User user;
 
@@ -55,5 +56,5 @@ public class MyUserDetails implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
+*/
 }

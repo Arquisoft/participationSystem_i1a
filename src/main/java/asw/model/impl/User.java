@@ -39,6 +39,7 @@ public class User {
 	private String identification;
 	
 	private String password;
+	private String login;
 	
 	@OneToMany(mappedBy = "user")
 	private Set<Proposal> proposals = new HashSet<Proposal>();
@@ -62,11 +63,6 @@ public class User {
 		this(firstName, lastName, email, address, nationality,
 				identification);
 		setDateOfBirth(dateOfBirth);
-	}
-	
-	public User(String firstName, String pass){
-		this.firstName = firstName;
-		this.password = pass;
 	}
 
 	public User(String firstName, String lastName, String email,
@@ -232,6 +228,14 @@ public class User {
 	
 	public void deleteComment(Proposal proposal, Comment comment) {
 		Association.MakeComment.unlink(this, comment, proposal);
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
 	}
 	
 }
