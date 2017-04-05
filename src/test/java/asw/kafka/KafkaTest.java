@@ -1,6 +1,6 @@
 package asw.kafka;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,6 +28,7 @@ import asw.model.types.VoteType;
 import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;
+import asw.persistence.services.VoteService;
 import asw.producers.KafkaProducer;
 
 @RunWith(SpringRunner.class)
@@ -53,6 +54,8 @@ public class KafkaTest {
 	private CommentService cS;
 	@Autowired
 	private ProposalService pS;
+	@Autowired
+	private VoteService vS;
 	@Autowired
 	private KafkaProducer producer;
 	
@@ -107,11 +110,11 @@ public class KafkaTest {
 	public void testVotes() throws Exception {
 		Set<String> expectedMessages = new HashSet<>();
 		Vote vote = new Vote(dani, prop, VoteType.POSITIVE);
-		pS.vote(prop, vote, dani);
+		vS.save(vote);
 		expectedMessages.add(String.format("%d;+", prop.getId()));
 
 		vote = new Vote(diego, prop, VoteType.NEGATIVE);
-		pS.vote(prop, vote, diego);
+		vS.save(vote);
 		expectedMessages.add(String.format("%d;-", prop.getId()));
 
 		checkMessages(expectedMessages);
