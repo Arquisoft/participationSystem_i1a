@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class APIController {
 
-    @RequestMapping("/user")
+    @RequestMapping("/REST/user")
     public UserInfo user() {
         return new UserInfo("pepe",0);
     }
