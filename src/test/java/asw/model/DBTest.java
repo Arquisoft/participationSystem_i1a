@@ -1,6 +1,7 @@
 package asw.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -11,10 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
@@ -26,7 +26,7 @@ import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;
 
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class DBTest {
 
@@ -37,10 +37,7 @@ public class DBTest {
 	private Proposal prop = new Proposal(diego, "One proposal", "description of the proposal");
 	private Comment comment1 = new Comment(diego, "content of the comment", prop);
 	private Comment comment2 = new Comment(dani, "content of the comment 2", prop);
-	
-    @Autowired
-    private TestEntityManager entityManager;
-	
+		
 	@Autowired
 	private UserService uS;
 	@Autowired
