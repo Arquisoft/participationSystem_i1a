@@ -91,7 +91,6 @@ public class DBTest {
 		assertEquals(2, pS.findAll().size());
 		assertTrue(pS.checkExists(prop.getId()));
 		assertTrue(pS.checkExists(prop2.getId()));
-		assertEquals(Topic.SPORTS,prop2.getTopic());
 	}
 	
 	@Test
@@ -100,6 +99,10 @@ public class DBTest {
 		assertTrue(cS.checkExists(comment1.getId()));
 		assertTrue(cS.checkExists(comment2.getId()));
 	}
+	
+	/*
+	 * Checks if the topic of a proposal is the correct one
+	 */
 	@Test
 	public void checkTopicTest(){
 		assertTrue(pS.checkExists(prop2.getId()));
@@ -136,6 +139,9 @@ public class DBTest {
 		assertEquals(1, dani.getVotes().size());
 	}
 	
+	/*
+	 * Checks wether a proposal has a not allowed word in its description
+	 */
 	@Test
 	public void NotAllowedWordsTest(){
 		assertTrue(pS.checkExists(prop.getId()));
