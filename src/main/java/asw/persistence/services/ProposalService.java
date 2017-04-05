@@ -11,7 +11,7 @@ public interface ProposalService {
 	public void delete(Proposal proposal);
 	
 	public List<Proposal> findAll();
-	public Proposal findByTitle(String tit);
+	public Proposal findProposalByTitle(String tit);
 	public Proposal findById(Long id);
 	
 	public void updateProposal(Proposal prop);

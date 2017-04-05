@@ -31,7 +31,7 @@ public class ProposalServiceImpl implements ProposalService {
 
 	@Override
 	public boolean checkExists(Long id) {
-		return repo.findOne(id) != null;
+		return repo.exists(id);
 	}
 
 	@Override
@@ -51,13 +51,13 @@ public class ProposalServiceImpl implements ProposalService {
 	}
 
 	@Override
-	public Proposal findByTitle(String tit) {
+	public Proposal findProposalByTitle(String tit) {
 		return repo.findByTitle(tit);
 	}
 
 	@Override
 	public Proposal findById(Long id) {
-		return repo.findById(id);
+		return repo.findOne(id);
 	}
 
 	@Override

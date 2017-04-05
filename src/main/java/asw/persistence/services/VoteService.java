@@ -12,6 +12,6 @@ public interface VoteService {
 	public boolean checkExists(Long id);
 	
 	public List<Vote> findAll();
-	public List<Vote> findByUser(User user);
-	public List<Vote> findByVotable(Votable v);
+	public List<Vote> findVoteByUser(User user);
+	public List<Vote> findVoteByVotable(Votable v);
 }

@@ -12,8 +12,7 @@ import asw.model.impl.Vote;
 @Repository
 public interface VoteRepository extends CrudRepository<Vote, Long> {
 
-	public List<Vote> findByUser(User user);
-
-	public List<Vote> findByVotable(Votable v);
-
+	List<Vote> findByUser(User user);
+	List<Vote> finByVotable(Votable v);
+	
 }

@@ -30,7 +30,7 @@ public class VoteServiceImpl implements VoteService {
 
 	@Override
 	public boolean checkExists(Long id) {
-		return repo.findOne(id) != null;
+		return repo.exists(id);
 	}
 
 	@Override
@@ -45,13 +45,13 @@ public class VoteServiceImpl implements VoteService {
 	}
 
 	@Override
-	public List<Vote> findByUser(User user) {
+	public List<Vote> findVoteByUser(User user) {
 		return repo.findByUser(user);
 	}
 
 	@Override
-	public List<Vote> findByVotable(Votable v) {
-		return repo.findByVotable(v);
+	public List<Vote> findVoteByVotable(Votable v) {
+		return repo.finByVotable(v);
 	}
 
 }

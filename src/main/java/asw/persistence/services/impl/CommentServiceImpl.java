@@ -30,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public boolean checkExists(Long id) {
-		return repo.findOne(id) != null;
+		return repo.exists(id);
 	}
 
 	@Override
@@ -51,23 +51,35 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public List<Comment> findByUser(User user) {
-		return repo.findByUser(user);
+		List<Comment> list = new ArrayList<Comment>();
+		for( Comment c: repo.findAll()){
+			if(c.getUser().equals(user)){
+				list.add(c);
+			}
+		}
+		return list;
 	}
 
 	@Override
 	public List<Comment> findByProposal(Proposal proposal) {
-		return repo.findByProposal(proposal);
+		List<Comment> list = new ArrayList<Comment>();
+		for( Comment c: repo.findAll()){
+			if(c.getProposal().equals(proposal)){
+				list.add(c);
+			}
+		}
+		return list;
 	}
 	
 	@Override
 	public Comment findById(Long id) {
-		return repo.findById(id);
+		return repo.findOne(id);
 	}
 
 	@Override
 	public Comment findByProposalAndId(Long proposalId, Long id) throws Exception {
-		Proposal p = proposalRepo.findById(proposalId);
-		Comment c = repo.findById(id);
+		Proposal p = proposalRepo.findOne(proposalId);
+		Comment c = repo.findOne(id);
 		if(!p.getComments().contains(c))
 			throw new Exception("The proposal does not contain the specified comment");
 		return c;
@@ -75,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public void updateComment(Long proposalId, Comment comment) {
-		Proposal prop = proposalRepo.findById(proposalId);
+		Proposal prop = proposalRepo.findOne(proposalId);
 		prop.getComments().add(comment);
 		proposalRepo.save(prop);
 	}

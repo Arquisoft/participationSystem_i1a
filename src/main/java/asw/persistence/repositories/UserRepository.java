@@ -8,8 +8,6 @@ import asw.model.impl.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
 
-	public User findById(Long id);
-	public User findByEmail(String email);
-	public User findByFirstName(String firstName);
-	public User findByLogin(String login);
+	User findByLogin(String login);	
+	
 }
