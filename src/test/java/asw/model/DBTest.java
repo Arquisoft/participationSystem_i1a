@@ -7,6 +7,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
+
+import javax.validation.constraints.AssertFalse;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +23,8 @@ import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
 import asw.model.impl.User;
 import asw.model.impl.Vote;
+import asw.model.types.NotAllowedWords;
+import asw.model.types.Topic;
 import asw.model.types.VoteType;
 import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
@@ -34,9 +39,21 @@ public class DBTest {
 			createDate("13/06/1996"), "Calle de Avilés", "Española", "12345678A");
 	private User dani = new User("Daniel", "Fernandez", "daniel@uniovi.es", 
 			createDate("02/08/1996"), "Calle de Tineo", "Española", "87654321B");
+	private Set<String> not = NotAllowedWords.getInstance().getSet();
 	private Proposal prop = new Proposal(diego, "One proposal", "description of the proposal");
+	private Proposal prop2 = new Proposal(diego, "One proposal", "description of the ass", Topic.SPORTS, 2, not);
 	private Comment comment1 = new Comment(diego, "content of the comment", prop);
 	private Comment comment2 = new Comment(dani, "content of the comment 2", prop);
+	
+	
+	/*
+	 * This two comments are for commenting the ones above
+	
+	private Comment comment3 = new Comment(diego, "content of the comment3", prop);
+	private Comment comment4 = new Comment(dani, "content of the comment 4", prop);
+	*/
+	
+	
 		
 	@Autowired
 	private UserService uS;
@@ -71,8 +88,10 @@ public class DBTest {
 	
 	@Test
 	public void proposalTest(){
-		assertEquals(1, pS.findAll().size());
+		assertEquals(2, pS.findAll().size());
 		assertTrue(pS.checkExists(prop.getId()));
+		assertTrue(pS.checkExists(prop2.getId()));
+		assertEquals(Topic.SPORTS,prop2.getTopic());
 	}
 	
 	@Test
@@ -81,13 +100,18 @@ public class DBTest {
 		assertTrue(cS.checkExists(comment1.getId()));
 		assertTrue(cS.checkExists(comment2.getId()));
 	}
-	
+	@Test
+	public void checkTopicTest(){
+		assertTrue(pS.checkExists(prop2.getId()));
+		assertEquals(Topic.SPORTS,prop2.getTopic());
+	}
 	@Test
 	public void makeProposalTest() {
 		diego.propose(prop);
-		assertEquals(1, diego.getProposals().size());
+		diego.propose(prop2);
+		assertEquals(2, diego.getProposals().size());
 		diego.deleteProposal(prop);
-		assertEquals(0, diego.getProposals().size());
+		assertEquals(1, diego.getProposals().size());
 	}
 	
 	@Test
@@ -102,12 +126,22 @@ public class DBTest {
 		assertEquals(0, dani.getComments().size());
 	}
 	
+	
+	
 	@Test
 	public void makeVoteTest() {
 		diego.vote(new Vote(diego, prop, VoteType.POSITIVE), prop);
 		assertEquals(1, diego.getVotes().size());
 		dani.vote(new Vote(dani, prop, VoteType.POSITIVE), prop);
 		assertEquals(1, dani.getVotes().size());
+	}
+	
+	@Test
+	public void NotAllowedWordsTest(){
+		assertTrue(pS.checkExists(prop.getId()));
+		assertTrue(pS.checkExists(prop2.getId()));
+		assertTrue(prop.checkNotAllowedWords());
+		assertTrue(!prop2.checkNotAllowedWords());
 	}
 
 	private Date createDate(String dateStr)
