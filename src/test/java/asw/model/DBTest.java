@@ -9,8 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-import javax.validation.constraints.AssertFalse;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,16 +42,6 @@ public class DBTest {
 	private Proposal prop2 = new Proposal(diego, "One proposal", "description of the ass", Topic.SPORTS, 2, not);
 	private Comment comment1 = new Comment(diego, "content of the comment", prop);
 	private Comment comment2 = new Comment(dani, "content of the comment 2", prop);
-	
-	
-	/*
-	 * This two comments are for commenting the ones above
-	
-	private Comment comment3 = new Comment(diego, "content of the comment3", prop);
-	private Comment comment4 = new Comment(dani, "content of the comment 4", prop);
-	*/
-	
-	
 		
 	@Autowired
 	private UserService uS;
@@ -100,7 +88,7 @@ public class DBTest {
 		assertTrue(cS.checkExists(comment2.getId()));
 	}
 	
-	/*
+	/**
 	 * Checks if the topic of a proposal is the correct one
 	 */
 	@Test
@@ -129,18 +117,20 @@ public class DBTest {
 		assertEquals(0, dani.getComments().size());
 	}
 	
-	
-	
 	@Test
 	public void makeVoteTest() {
-		diego.vote(new Vote(diego, prop, VoteType.POSITIVE), prop);
+		Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
+		diego.vote(v1, prop);
 		assertEquals(1, diego.getVotes().size());
-		dani.vote(new Vote(dani, prop, VoteType.POSITIVE), prop);
+		assertEquals(1, prop.getScore());
+		Vote v2 = new Vote(dani, prop, VoteType.POSITIVE);
+		dani.vote(v2, prop);
 		assertEquals(1, dani.getVotes().size());
+		assertEquals(2, prop.getScore());
 	}
 	
-	/*
-	 * Checks wether a proposal has a not allowed word in its description
+	/**
+	 * Checks whether a proposal has a not allowed word in its description
 	 */
 	@Test
 	public void NotAllowedWordsTest(){

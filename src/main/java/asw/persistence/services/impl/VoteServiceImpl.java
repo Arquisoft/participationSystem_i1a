@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import asw.model.impl.User;
 import asw.model.impl.Votable;
@@ -12,6 +13,7 @@ import asw.model.impl.Vote;
 import asw.persistence.repositories.VoteRepository;
 import asw.persistence.services.VoteService;
 
+@Service
 public class VoteServiceImpl implements VoteService {
 
 	private VoteRepository repo;
