@@ -1,5 +1,7 @@
 package asw.security;
 
+import javax.annotation.ManagedBean;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -7,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import asw.model.impl.User;
 import asw.persistence.services.UserService;
 
+@ManagedBean
 public class UserLoginService implements UserDetailsService {
 
 	private UserService us;
