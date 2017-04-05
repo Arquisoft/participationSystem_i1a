@@ -80,4 +80,9 @@ public class CommentServiceImpl implements CommentService {
 		proposalRepo.save(prop);
 	}
 
+	@Override
+	public void clearTable() {
+		repo.deleteAll();
+	}
+
 }

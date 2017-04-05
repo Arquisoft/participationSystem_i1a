@@ -19,6 +19,7 @@ public interface CommentService {
 	public Comment findByProposalAndId(Long proposalId, Long id) throws Exception;
 	
 	public void updateComment(Long proposalId, Comment comment);
+	public void clearTable();
 	
 	
 }

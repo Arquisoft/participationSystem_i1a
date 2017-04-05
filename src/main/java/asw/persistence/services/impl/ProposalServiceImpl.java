@@ -65,6 +65,9 @@ public class ProposalServiceImpl implements ProposalService {
 		repo.save(prop);
 	}
 	
-
+	@Override
+	public void clearTable() {
+		repo.deleteAll();
+	}
 
 }

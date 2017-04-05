@@ -57,5 +57,10 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public void clearTable() {
+		repo.deleteAll();
+	}
 
 }

@@ -15,5 +15,6 @@ public interface ProposalService {
 	public Proposal findById(Long id);
 	
 	public void updateProposal(Proposal prop);
+	public void clearTable();
 	
 }

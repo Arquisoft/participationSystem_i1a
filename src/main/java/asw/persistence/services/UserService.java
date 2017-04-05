@@ -14,5 +14,6 @@ public interface UserService {
 	public User findById(Long id);
 	
 	public User findUserByLogin(String login);
+	public void clearTable();
 	
 }
