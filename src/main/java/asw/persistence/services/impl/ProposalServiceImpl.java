@@ -5,33 +5,23 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
-import asw.model.impl.Association;
 import asw.model.impl.Proposal;
-import asw.model.impl.User;
-import asw.model.impl.Vote;
 import asw.persistence.repositories.ProposalRepository;
 import asw.persistence.repositories.UserRepository;
 import asw.persistence.repositories.VoteRepository;
 import asw.persistence.services.ProposalService;
-import asw.producers.VoteNotifier;
 
 @Service
 public class ProposalServiceImpl implements ProposalService {
 
 	private ProposalRepository repo;
-	private UserRepository userRepo;
-	private VoteRepository voteRepo;
-
 	@Autowired
 	public ProposalServiceImpl(ProposalRepository repository,
 			UserRepository userRepo,
 			VoteRepository voteRepo) {
 		this.repo = repository;
-		this.userRepo = userRepo;
-		this.voteRepo = voteRepo;
 	}
 
 	@Override
@@ -58,7 +48,6 @@ public class ProposalServiceImpl implements ProposalService {
 				proposals.add(it.next());
 		}
 		return proposals;
-		// return repo.findAll();
 	}
 
 	@Override
@@ -67,32 +56,15 @@ public class ProposalServiceImpl implements ProposalService {
 	}
 
 	@Override
-	public void vote(Proposal proposal, Vote vote, User user) {
-		// I dont know how to correctly save a new vote. 
-		throw new RuntimeException("Not yet implemented");
-		
-//		voteRepo.save(vote);
-//		userRepo.save(user);
-//		repo.save(proposal);
-//		new VoteNotifier().notifyNewVote(vote);
-	}
-
-	@Override
-	public Proposal findProposalById(String id) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not yet implemented");
+	public Proposal findById(Long id) {
+		return repo.findById(id);
 	}
 
 	@Override
 	public void updateProposal(Proposal prop) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not yet implemented");
+		repo.save(prop);
 	}
+	
 
-	@Override
-	public void insertProposal(Proposal proposal) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not yet implemented");
-	}
 
 }

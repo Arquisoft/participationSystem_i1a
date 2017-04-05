@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import asw.model.impl.*;
 import asw.persistence.repositories.CommentRepository;
+import asw.persistence.repositories.ProposalRepository;
 import asw.persistence.services.CommentService;
 
 @Service
 public class CommentServiceImpl implements CommentService {
 
 	private CommentRepository repo;
+	private ProposalRepository proposalRepo;
 	
 	@Autowired
 	public CommentServiceImpl(CommentRepository repository) {
@@ -45,7 +47,6 @@ public class CommentServiceImpl implements CommentService {
 				comments.add(it.next());
 		}
 		return comments;
-		//return repo.findAll();
 	}
 
 	@Override
@@ -57,23 +58,26 @@ public class CommentServiceImpl implements CommentService {
 	public List<Comment> findByProposal(Proposal proposal) {
 		return repo.findByProposal(proposal);
 	}
-
+	
 	@Override
-	public Comment findByProposalAndId(String proposalId, String id) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not yet implemented");
+	public Comment findById(Long id) {
+		return repo.findById(id);
 	}
 
 	@Override
-	public void updateComment(String proposalId, String id) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not yet implemented");
+	public Comment findByProposalAndId(Long proposalId, Long id) throws Exception {
+		Proposal p = proposalRepo.findById(proposalId);
+		Comment c = repo.findById(id);
+		if(!p.getComments().contains(c))
+			throw new Exception("The proposal does not contain the specified comment");
+		return c;
 	}
 
 	@Override
-	public void insertComment(Comment comment) {
-		// TODO Auto-generated method stub
-		throw new RuntimeException("Not yet implemented");
+	public void updateComment(Long proposalId, Comment comment) {
+		Proposal prop = proposalRepo.findById(proposalId);
+		prop.getComments().add(comment);
+		proposalRepo.save(prop);
 	}
 
 }

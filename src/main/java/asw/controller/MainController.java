@@ -15,13 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 import asw.model.impl.Association;
 import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
-import asw.model.impl.User;
-import asw.model.impl.Votable;
 import asw.model.impl.Vote;
 import asw.model.types.Topic;
 import asw.model.types.VoteType;
 import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
+import asw.persistence.services.VoteService;
 import asw.producers.KafkaProducer;
 import asw.security.MyUserDetails;
 
@@ -36,6 +35,9 @@ public class MainController {
     
     @Autowired
     private CommentService cs;
+    
+    @Autowired
+    private VoteService vs;
     
 /**
     @RequestMapping("/")
@@ -73,7 +75,7 @@ public class MainController {
 
 		return "user";
 	}
-/**
+/*
 	@RequestMapping("/user")
 	public String userHome(Model model) {
 		return "user";
@@ -95,7 +97,7 @@ public class MainController {
 		proposal.setTopic(createProposal.getTopic());
 
 		if (!proposal.checkNotAllowedWords()) {
-			ps.insertProposal(proposal);
+			ps.save(proposal);
 			kafkaProducer.send("createdProposal", "created proposal");
 		}
 
@@ -103,76 +105,79 @@ public class MainController {
 	}
 
 	@RequestMapping("/deleteProposal/{id}")
-	public String deleteProposal(Model model, @PathVariable("id") String id) {
-		Proposal p = ps.findProposalById(id);
+	public String deleteProposal(Model model, @PathVariable("id") Long id) {
+		Proposal p = ps.findById(id);
 		ps.delete(p);
 		return "redirect:/user";
 	}
 	
 	@RequestMapping("/selectProposal/{id}")
-	public String selectProposal(Model model, @PathVariable String id) {
-		model.addAttribute("p", ps.findProposalById(id));
+	public String selectProposal(Model model, @PathVariable Long id) {
+		model.addAttribute("p", ps.findById(id));
 		model.addAttribute("createComment", new Comment());
 		return "proposal";
 	}
 
 	@RequestMapping("/upvoteProposal/{id}")
-	public String upvoteProposal(Model model, @PathVariable("id") String id) {
+	public String upvoteProposal(Model model, @PathVariable("id") Long id) {
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();	
 		
-		Proposal prop = ps.findProposalById(id);
+		Proposal prop = ps.findById(id);
 		
 		if (prop != null && user != null) {
-			vote(user.getUser(), prop, VoteType.POSITIVE);
+			Vote v = new Vote(user.getUser(), prop, VoteType.POSITIVE);
+			vs.save(v);
 			ps.updateProposal(prop);
 		}
 		return "redirect:/selectProposal/" + id;
 	}
 
 	@RequestMapping("/downvoteProposal/{id}")
-	public String downvoteProposal(Model model, @PathVariable("id") String id) {
+	public String downvoteProposal(Model model, @PathVariable("id") Long id) {
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();	
 		
-		Proposal prop = ps.findProposalById(id);
+		Proposal prop = ps.findById(id);
 		
 		if (prop != null && user != null) {
-			vote(user.getUser(), prop, VoteType.NEGATIVE);
+			Vote v = new Vote(user.getUser(), prop, VoteType.NEGATIVE);
+			vs.save(v);
 			ps.updateProposal(prop);
 		}
 		return "redirect:/selectProposal/" + id;
 	}
 
 	@RequestMapping("/createComment/{id}")
-	public String commentProposal(Model model, @PathVariable("id") String id,
+	public String commentProposal(Model model, @PathVariable("id") Long id,
 			@ModelAttribute Comment createComment) {
 		
 		Comment comment = new Comment();
 		comment.setContent(createComment.getContent());
-		Proposal p = ps.findProposalById(id);
+		Proposal p = ps.findById(id);
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();	
 		
 		Association.MakeComment.link(user.getUser(), comment, p);
 		
-		cs.insertComment(comment);
+		cs.save(comment);
 		kafkaProducer.send("createdComment", "created comment");
 		return "redirect:/selectProposal/" + id;
 	}
 
 	@RequestMapping("/upvoteComment/{proposalId}/{id}")
 	public String upvoteComment(Model model,
-			@PathVariable("proposalId") String proposalId,
-			@PathVariable("id") String id) {
+			@PathVariable("proposalId") Long proposalId,
+			@PathVariable("id") Long id) throws Exception {
 		
 		Comment c = cs.findByProposalAndId(proposalId, id);
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();	
 		
 		if (c != null && user.getUser() != null) {
-			vote(user.getUser(), c, VoteType.POSITIVE);
-			cs.updateComment(proposalId, id);
+			Vote v = new Vote (user.getUser(), c, VoteType.POSITIVE);
+			vs.save(v);
+			cs.updateComment(proposalId, c);
 		}
 		
 		return "redirect:/selectProposal/" + proposalId;
@@ -180,16 +185,17 @@ public class MainController {
 
 	@RequestMapping("/downvoteComment/{proposalId}/{id}")
 	public String downvoteComment(Model model,
-			@PathVariable("proposalId") String proposalId,
-			@PathVariable("id") String id) {
+			@PathVariable("proposalId") Long proposalId,
+			@PathVariable("id") Long id) throws Exception {
 		
 		Comment c = cs.findByProposalAndId(proposalId, id);
 		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
 				getAuthentication().getPrincipal();	
 		
 		if (c != null && user.getUser() != null) {
-			vote(user.getUser(), c, VoteType.NEGATIVE);
-			cs.updateComment(proposalId, id);
+			Vote v = new Vote(user.getUser(), c, VoteType.NEGATIVE);
+			vs.save(v);
+			cs.updateComment(proposalId, c);
 		}
 		
 		return "redirect:/selectProposal/" + proposalId;
@@ -206,11 +212,6 @@ public class MainController {
 		for(Topic t:Topic.values())
 			l.add(t.toString());
 		return l;
-	}
-	
-	private void vote(User user, Votable p, VoteType vt){
-		@SuppressWarnings("unused")
-		Vote v = new Vote(user, p, vt);
 	}
 	
 }
