@@ -18,6 +18,7 @@ import asw.model.impl.User;
 import asw.model.impl.Vote;
 import asw.model.types.Topic;
 import asw.model.types.VoteType;
+import asw.persistence.FillDatabase;
 import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;
@@ -60,6 +61,7 @@ public class MainController {
     
     @RequestMapping("/")
 	public ModelAndView landing(Model model) {
+    	FillDatabase.fill();
 		return new ModelAndView("redirect:" + "/login");
 	}
 

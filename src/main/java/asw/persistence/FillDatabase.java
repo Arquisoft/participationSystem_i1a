@@ -55,6 +55,8 @@ public class FillDatabase {
 		u4 = new User("Pablo", 	 	 "García Ledo", 	"email4", new Date(), "Address4", "Australia", "4444");
 		uadmin = new User("Admin",	 "Istrador",		"emailadmin", new Date(), "AddressAdmin", "Spain", "5555");
 		uadmin.setAdmin(true);
+		u4.setLogin("dani39");
+		u4.setPassword("password");
 	}
 
 	private static void initializeProposals() {
