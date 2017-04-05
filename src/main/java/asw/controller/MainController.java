@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +31,10 @@ public class MainController {
     @Autowired
     private KafkaProducer kafkaProducer;
     
+    @Autowired
     private ProposalService ps;
+    
+    @Autowired
     private CommentService cs;
     
 /**
@@ -71,7 +73,7 @@ public class MainController {
 
 		return "user";
 	}
-
+/**
 	@RequestMapping("/user")
 	public String userHome(Model model) {
 		return "user";
@@ -80,6 +82,31 @@ public class MainController {
 	@RequestMapping("/admin")
 	public String adminHome(Model model){
 		return "admin";
+	}
+*/	
+	
+	@RequestMapping("/createProposal")
+	public String createProposal(Model model,
+			@ModelAttribute Proposal createProposal) {
+
+		Proposal proposal = new Proposal();
+		proposal.setTitle(createProposal.getTitle());
+		proposal.setDescription(createProposal.getDescription());
+		proposal.setTopic(createProposal.getTopic());
+
+		if (!proposal.checkNotAllowedWords()) {
+			ps.insertProposal(proposal);
+			kafkaProducer.send("createdProposal", "created proposal");
+		}
+
+		return "redirect:/user";
+	}
+
+	@RequestMapping("/deleteProposal/{id}")
+	public String deleteProposal(Model model, @PathVariable("id") String id) {
+		Proposal p = ps.findProposalById(id);
+		ps.delete(p);
+		return "redirect:/user";
 	}
 	
 	@RequestMapping("/selectProposal/{id}")
@@ -116,10 +143,22 @@ public class MainController {
 		}
 		return "redirect:/selectProposal/" + id;
 	}
-	
-	private void vote(User user, Votable p, VoteType vt){
-		@SuppressWarnings("unused")
-		Vote v = new Vote(user, p, vt);
+
+	@RequestMapping("/createComment/{id}")
+	public String commentProposal(Model model, @PathVariable("id") String id,
+			@ModelAttribute Comment createComment) {
+		
+		Comment comment = new Comment();
+		comment.setContent(createComment.getContent());
+		Proposal p = ps.findProposalById(id);
+		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
+				getAuthentication().getPrincipal();	
+		
+		Association.MakeComment.link(user.getUser(), comment, p);
+		
+		cs.insertComment(comment);
+		kafkaProducer.send("createdComment", "created comment");
+		return "redirect:/selectProposal/" + id;
 	}
 
 	@RequestMapping("/upvoteComment/{proposalId}/{id}")
@@ -156,48 +195,6 @@ public class MainController {
 		return "redirect:/selectProposal/" + proposalId;
 	}
 
-	@RequestMapping("/createProposal")
-	public String createProposal(Model model,
-			@ModelAttribute Proposal createProposal,
-			BindingResult result) {
-
-		Proposal proposal = new Proposal();
-		proposal.setTitle(createProposal.getTitle());
-		proposal.setDescription(createProposal.getDescription());
-		proposal.setTopic(createProposal.getTopic());
-
-		if (!proposal.checkNotAllowedWords()) {
-			ps.insertProposal(proposal);
-			kafkaProducer.send("createdProposal", "created proposal");
-		}
-
-		return "redirect:/user";
-	}
-
-	@RequestMapping("/deleteProposal/{id}")
-	public String deleteProposal(Model model, @PathVariable("id") String id) {
-		Proposal p = ps.findProposalById(id);
-		ps.delete(p);
-		return "redirect:/user";
-	}
-
-	@RequestMapping("/createComment/{id}")
-	public String commentProposal(Model model, @PathVariable("id") String id,
-			@ModelAttribute Comment createComment) {
-		
-		Comment comment = new Comment();
-		comment.setContent(createComment.getContent());
-		Proposal p = ps.findProposalById(id);
-		MyUserDetails user = (MyUserDetails) SecurityContextHolder.getContext().
-				getAuthentication().getPrincipal();	
-		
-		Association.MakeComment.link(user.getUser(), comment, p);
-		
-		cs.insertComment(comment);
-		kafkaProducer.send("createdComment", "created comment");
-		return "redirect:/selectProposal/" + id;
-	}
-
 	@ModelAttribute("proposals")
 	public List<Proposal> proposals() {
 		return ps.findAll();
@@ -209,6 +206,11 @@ public class MainController {
 		for(Topic t:Topic.values())
 			l.add(t.toString());
 		return l;
+	}
+	
+	private void vote(User user, Votable p, VoteType vt){
+		@SuppressWarnings("unused")
+		Vote v = new Vote(user, p, vt);
 	}
 	
 }

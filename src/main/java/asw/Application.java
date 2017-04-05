@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 //@EntityScan("asw.persistence.model.impl")
-//@ComponentScan(basePackages="asw")
+@ComponentScan(basePackages="asw")
 @EnableJpaRepositories("asw.persistence.repositories")
 @EnableAutoConfiguration
 public class Application {
