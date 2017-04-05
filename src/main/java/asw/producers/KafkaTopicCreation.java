@@ -9,7 +9,12 @@ import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.ZkConnection;
 
 public class KafkaTopicCreation {
-    public static void createTopic(String topicName, int partitions, int replication) throws Exception {
+	static {
+		createTopic("newVote", 1, 1);
+	}
+	
+	// Returns true if the topic has been created
+    public static boolean createTopic(String topicName, int partitions, int replication) {
         ZkClient zkClient = null;
         ZkUtils zkUtils;
         try {
@@ -22,10 +27,16 @@ public class KafkaTopicCreation {
 
             Properties topicConfig = new Properties();
 
-            AdminUtils.createTopic(zkUtils, topicName, partitions, replication, topicConfig);
+            if (AdminUtils.topicExists(zkUtils, topicName)) {
+            	return false;
+            } else {
+            	AdminUtils.createTopic(zkUtils, topicName, partitions, replication, topicConfig);
+            	return true;
+            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
+            return false;
         } finally {
             if (zkClient != null)
                 zkClient.close();
