@@ -19,6 +19,8 @@ public abstract class Votable {
 	private int upvotes;
 	private int downvotes;
 	
+	Votable() {}
+	
 	public Long getId() {
 		return id;
 	}
@@ -39,31 +41,23 @@ public abstract class Votable {
 		return upvotes;
 	}
 
-	public void setUpvotes(int upvotes) {
-		this.upvotes = upvotes;
-	}
-
 	public int getDownvotes() {
 		return downvotes;
 	}
 
-	public void setDownvotes(int downvotes) {
-		this.downvotes = downvotes;
-	}
-
 	public void incrementUpvotes() {
-		this.upvotes+=1;
+		this.upvotes++;
 	}
 
 	public void incrementDownvotes() {
-		this.downvotes+=1;
+		this.downvotes++;
 	}
 
 	public void decrementUpvotes() {
-		this.upvotes-=1;
+		this.upvotes--;
 	}
 
 	public void decrementDownvotes() {
-		this.downvotes-=1;
+		this.downvotes--;
 	}
 }
