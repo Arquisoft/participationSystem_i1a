@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean checkExists(Long id) {
-		return repo.findOne(id) != null;
+		return repo.exists(id);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findById(Long id) {
-		return repo.findById(id);
+		return repo.findOne(id);
 	}
 	
 	@Override
@@ -64,11 +64,9 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User findUserByLoginAndPassword(String login, String password) {
-		User u = repo.findByLogin(login);
+		User u = findUserByLogin(login);
 		
-		if (u == null) {
-			return null;
-		} else if(password.equals(u.getPassword())){
+		if(u != null && password.equals(u.getPassword())){
 			return u;
 		} else {
 			return null;

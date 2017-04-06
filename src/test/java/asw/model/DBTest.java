@@ -27,6 +27,7 @@ import asw.model.types.VoteType;
 import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;
+import asw.persistence.services.VoteService;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,6 +43,8 @@ public class DBTest {
 	private Proposal prop2 = new Proposal(diego, "One proposal", "description of the ass", Topic.SPORTS, 2, not);
 	private Comment comment1 = new Comment(diego, "content of the comment", prop);
 	private Comment comment2 = new Comment(dani, "content of the comment 2", prop);
+	private Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
+	private Vote v2 = new Vote(dani, prop, VoteType.POSITIVE);
 		
 	@Autowired
 	private UserService uS;
@@ -49,6 +52,8 @@ public class DBTest {
 	private CommentService cS;
 	@Autowired
 	private ProposalService pS;
+	@Autowired
+	private VoteService vS;
 	
 	@Before
 	public void setUp() {
@@ -60,11 +65,17 @@ public class DBTest {
 	}
 	
 	private void addData() {
+		cS.clearTable();
+		pS.clearTable();
+		uS.clearTable();
 		uS.save(diego);
 		uS.save(dani);
 		pS.save(prop);
+		pS.save(prop2);
 		cS.save(comment1);
 		cS.save(comment2);
+		vS.save(v1);
+		vS.save(v2);
 	}
 	
 	@Test
@@ -88,9 +99,6 @@ public class DBTest {
 		assertTrue(cS.checkExists(comment2.getId()));
 	}
 	
-	/**
-	 * Checks if the topic of a proposal is the correct one
-	 */
 	@Test
 	public void checkTopicTest(){
 		assertTrue(pS.checkExists(prop2.getId()));
@@ -119,29 +127,23 @@ public class DBTest {
 	
 	@Test
 	public void makeVoteTest() {
-		Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
 		diego.vote(v1, prop);
 		assertEquals(1, diego.getVotes().size());
 		assertEquals(1, prop.getScore());
-		Vote v2 = new Vote(dani, prop, VoteType.POSITIVE);
 		dani.vote(v2, prop);
 		assertEquals(1, dani.getVotes().size());
 		assertEquals(2, prop.getScore());
 	}
 	
-	/**
-	 * Checks whether a proposal has a not allowed word in its description
-	 */
 	@Test
-	public void NotAllowedWordsTest(){
+	public void notAllowedWordsTest(){
 		assertTrue(pS.checkExists(prop.getId()));
 		assertTrue(pS.checkExists(prop2.getId()));
 		assertTrue(prop.checkNotAllowedWords());
 		assertTrue(!prop2.checkNotAllowedWords());
 	}
 
-	private Date createDate(String dateStr)
-	{
+	private Date createDate(String dateStr) {
 		Date date = new Date();
 		DateFormat format= new SimpleDateFormat("dd/MM/yyyy");
 		try {
