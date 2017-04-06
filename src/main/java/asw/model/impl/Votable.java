@@ -13,7 +13,7 @@ public abstract class Votable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToMany(mappedBy = "votable")
+	@OneToMany(mappedBy = "votable", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
 	private Set<Vote> votes = new HashSet<Vote>();
 	
 	private int upvotes;
