@@ -12,11 +12,11 @@ public class CucumberTest{
 	
 	@BeforeClass
     public static void setUp() {
-        //CucumberSteps.setUp();
+        CucumberSteps.setUp();
     }
 
     @AfterClass
     public static void tearDown() {
-        //CucumberSteps.tearDown();
+        CucumberSteps.tearDown();
     }
 }

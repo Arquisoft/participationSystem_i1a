@@ -46,15 +46,15 @@ public class Proposal extends Votable {
 		this.description = description;
 	}
 	
-	public Proposal(User user, String tit, String desc, Topic topic){
+	public Proposal(User user, String tit, String desc, String topic){
 		this(user, tit, desc);
-		this.topic = topic;
+		setTopicAux(topic);
 		this.created = new Date();
 		this.comments = new HashSet<Comment>();
 	}
 	
 	public Proposal(User user, String tit, String desc, 
-			Topic topic, int minSupport, Set<String> l){
+			String topic, int minSupport, Set<String> l){
 		this(user, tit, desc, topic);
 		this.minSupport = minSupport;
 		this.notAllowedWords = l;

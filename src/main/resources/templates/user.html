@@ -38,7 +38,7 @@
 					<tbody>
 						<tr th:each="p : ${proposals}">
 							<td th:text="${p.getTitle()}"></td>
-							<td th:text="${p.getTopic()}"></td>
+							<td th:text="${p.getTopicAux()}"></td>
 							<td th:text="${p.getScore()}"></td>
 							<td><a th:href="${'/selectProposal/' + p.getId()}"
 								class="btn btn-block btn-info" th:id="${p.getId()}">See</a></td>

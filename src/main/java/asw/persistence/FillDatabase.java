@@ -66,11 +66,11 @@ public class FillDatabase {
 	}
 
 	private void initializeProposals() {
-		p1 = new Proposal(u1, "Title1", "Description1", Topic.HEALTHCARE);
-		p2 = new Proposal(u2, "Title2", "Description2", Topic.ENVIROMENT);
-		p3 = new Proposal(u3, "Title3", "Description3", Topic.POLITICS);
-		p4 = new Proposal(u4, "Title4", "Description4", Topic.SECURITY);
-		p5 = new Proposal(u4, "Title5", "Description5", Topic.SPORTS);
+		p1 = new Proposal(u1, "Title1", "Description1", "HEALTHCARE");
+		p2 = new Proposal(u2, "Title2", "Description2", "ENVIROMENT");
+		p3 = new Proposal(u3, "Title3", "Description3", "POLITICS");
+		p4 = new Proposal(u4, "Title4", "Description4", "SECURITY");
+		p5 = new Proposal(u4, "Title5", "Description5", "SPORTS");
 		addProposals();
 	}
 

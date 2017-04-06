@@ -78,11 +78,11 @@ public class KafkaTest {
 		User user1 = uS.findAll().get(1);
 
 		Vote vote = new Vote(user0, prop, VoteType.POSITIVE);
-		vS.save(vote);
+//		vS.save(vote);
 		expectedMessages.add(String.format("%d;+", prop.getId()));
 
 		vote = new Vote(user1, prop, VoteType.NEGATIVE);
-		vS.save(vote);
+//		vS.save(vote);
 		expectedMessages.add(String.format("%d;-", prop.getId()));
 
 		checkMessages(expectedMessages);

@@ -40,7 +40,7 @@ public class DBTest {
 			createDate("02/08/1996"), "Calle de Tineo", "Española", "87654321B");
 	private Set<String> not = NotAllowedWords.getInstance().getSet();
 	private Proposal prop = new Proposal(diego, "One proposal", "description of the proposal");
-	private Proposal prop2 = new Proposal(diego, "One proposal", "description of the ass", Topic.SPORTS, 2, not);
+	private Proposal prop2 = new Proposal(diego, "One proposal", "description of the ass", "SPORTS", 2, not);
 	private Comment comment1 = new Comment(diego, "content of the comment", prop);
 	private Comment comment2 = new Comment(dani, "content of the comment 2", prop);
 	private Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
@@ -123,17 +123,17 @@ public class DBTest {
 		assertEquals(0, dani.getComments().size());
 	}
 	
-//	@Test
-//	public void makeVoteTest() {
-//		Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
-//		vS.save(v1);
-//		assertEquals(1, diego.getVotes().size());
-//		assertEquals(1, prop.getScore());
-//		Vote v2 = new Vote(dani, prop, VoteType.POSITIVE);
-//		vS.save(v2);
-//		assertEquals(1, dani.getVotes().size());
-//		assertEquals(2, prop.getScore());
-//	}
+	@Test
+	public void makeVoteTest() {
+		Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
+		vS.save(v1);
+		assertEquals(1, diego.getVotes().size());
+		assertEquals(1, prop.getScore());
+		Vote v2 = new Vote(dani, prop, VoteType.POSITIVE);
+		vS.save(v2);
+		assertEquals(1, dani.getVotes().size());
+		assertEquals(2, prop.getScore());
+	}
 	
 	@Test
 	public void notAllowedWordsTest(){

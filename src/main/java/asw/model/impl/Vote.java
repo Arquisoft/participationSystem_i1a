@@ -2,29 +2,35 @@ package asw.model.impl;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import asw.model.types.KeyVote;
 import asw.model.types.VoteType;
 import asw.producers.VoteNotifier;
+import asw.producers.VoteNotifierImpl;
 
 @Entity
+@Configurable
 @IdClass(KeyVote.class)
 public class Vote implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	@Autowired(required=false)
+	@Autowired
 	private VoteNotifier notifier;
 	
-	@Id @ManyToOne
+	@Id @ManyToOne(cascade = {CascadeType.MERGE})
 	private User user;
 	
 	@Id @ManyToOne
