@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
 import asw.model.impl.Association;
 import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
@@ -45,9 +44,6 @@ public class MainController {
     @Autowired
     private VoteService vs;
     
-    @Autowired
-    private FillDatabase fd;
-    
 /**
     @RequestMapping("/")
     public String landing(Model model) {
@@ -64,7 +60,6 @@ public class MainController {
     
     @RequestMapping("/")
 	public ModelAndView landing(Model model) {
-    	fd.fill();
 		return new ModelAndView("redirect:" + "/login");
 	}
 

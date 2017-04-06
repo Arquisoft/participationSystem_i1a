@@ -66,11 +66,13 @@ public class UserServiceImpl implements UserService {
 	public User findUserByLoginAndPassword(String login, String password) {
 		User u = repo.findByLogin(login);
 		
-		if(password.equals(u.getPassword())){
+		if (u == null) {
+			return null;
+		} else if(password.equals(u.getPassword())){
 			return u;
+		} else {
+			return null;
 		}
-		
-		return null;
 	}
 
 }

@@ -2,6 +2,8 @@ package asw.persistence;
 
 import java.util.Date;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class FillDatabase {
 	@Autowired
 	private VoteService vS;
 	
+	@PostConstruct
 	public void fill() {
 		vS.clearTable();
 		cS.clearTable();
@@ -86,6 +89,7 @@ public class FillDatabase {
 		uS.save(u2);
 		uS.save(u3);
 		uS.save(u4);
+		uS.save(uadmin);
 	}
 
 	private void addProposals() {
