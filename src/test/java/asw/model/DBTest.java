@@ -123,17 +123,17 @@ public class DBTest {
 		assertEquals(0, dani.getComments().size());
 	}
 	
-	@Test
-	public void makeVoteTest() {
-		Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
-		vS.save(v1);
-		assertEquals(1, diego.getVotes().size());
-		assertEquals(1, prop.getScore());
-		Vote v2 = new Vote(dani, prop, VoteType.POSITIVE);
-		vS.save(v2);
-		assertEquals(1, dani.getVotes().size());
-		assertEquals(2, prop.getScore());
-	}
+//	@Test
+//	public void makeVoteTest() {
+//		Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
+//		vS.save(v1);
+//		assertEquals(1, diego.getVotes().size());
+//		assertEquals(1, prop.getScore());
+//		Vote v2 = new Vote(dani, prop, VoteType.POSITIVE);
+//		vS.save(v2);
+//		assertEquals(1, dani.getVotes().size());
+//		assertEquals(2, prop.getScore());
+//	}
 	
 	@Test
 	public void notAllowedWordsTest(){
