@@ -6,9 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import asw.model.types.KeyVote;
 import asw.model.types.VoteType;
+import asw.producers.VoteNotifier;
 
 @Entity
 @IdClass(KeyVote.class)
@@ -16,6 +20,10 @@ public class Vote implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@Transient
+	@Autowired(required=false)
+	private VoteNotifier notifier;
+	
 	@Id @ManyToOne
 	private User user;
 	
@@ -29,6 +37,9 @@ public class Vote implements Serializable {
 	public Vote(User user, Votable votable, VoteType voteType) {
 		this.voteType=voteType;
 		Association.MakeVote.link(user, this, votable);
+		if (notifier != null) {
+			notifier.notifyNewVote(this);
+		}
 	}	
 	
 	public void _setUser(User user) {

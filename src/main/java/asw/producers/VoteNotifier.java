@@ -2,11 +2,12 @@ package asw.producers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Service;
 
 import asw.model.impl.Vote;
 import asw.model.types.VoteType;
 
-@Configurable
+@Service
 public class VoteNotifier {
 	
 	@Autowired
