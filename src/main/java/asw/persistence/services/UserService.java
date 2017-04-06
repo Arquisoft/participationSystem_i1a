@@ -6,7 +6,7 @@ import asw.model.impl.User;
 
 public interface UserService {
 
-	public void save(User user);
+	public User save(User user);
 	public boolean checkExists(Long id);
 	public void delete(User user);
 	

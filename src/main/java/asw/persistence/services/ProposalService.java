@@ -6,7 +6,7 @@ import asw.model.impl.Proposal;
 
 public interface ProposalService {
 	
-	public void save(Proposal proposal);
+	public Proposal save(Proposal proposal);
 	public boolean checkExists(Long id);
 	public void delete(Proposal proposal);
 	

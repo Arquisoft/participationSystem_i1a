@@ -68,14 +68,12 @@ public class DBTest {
 		cS.clearTable();
 		pS.clearTable();
 		uS.clearTable();
-		uS.save(diego);
-		uS.save(dani);
-		pS.save(prop);
-		pS.save(prop2);
-		cS.save(comment1);
-		cS.save(comment2);
-		vS.save(v1);
-		vS.save(v2);
+		diego = uS.save(diego);
+		dani = uS.save(dani);
+		prop = pS.save(prop);
+		prop2 = pS.save(prop2);
+		comment1 = cS.save(comment1);
+		comment2 = cS.save(comment2);
 	}
 	
 	@Test
@@ -127,10 +125,12 @@ public class DBTest {
 	
 	@Test
 	public void makeVoteTest() {
-		diego.vote(v1, prop);
+		Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
+		vS.save(v1);
 		assertEquals(1, diego.getVotes().size());
 		assertEquals(1, prop.getScore());
-		dani.vote(v2, prop);
+		Vote v2 = new Vote(dani, prop, VoteType.POSITIVE);
+		vS.save(v2);
 		assertEquals(1, dani.getVotes().size());
 		assertEquals(2, prop.getScore());
 	}

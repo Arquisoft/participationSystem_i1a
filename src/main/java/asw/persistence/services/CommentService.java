@@ -8,7 +8,7 @@ import asw.model.impl.User;
 
 public interface CommentService {
 	
-	public void save(Comment comment);
+	public Comment save(Comment comment);
 	public boolean checkExists(Long id);
 	public void delete(Comment comment);
 	

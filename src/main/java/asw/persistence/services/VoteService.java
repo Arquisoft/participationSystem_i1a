@@ -8,7 +8,7 @@ import asw.model.impl.Vote;
 
 public interface VoteService {
 
-	public void save(Vote v);
+	public Vote save(Vote v);
 	public boolean checkExists(Long id);
 	
 	public List<Vote> findAll();

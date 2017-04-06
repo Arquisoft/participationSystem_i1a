@@ -24,8 +24,8 @@ public class VoteServiceImpl implements VoteService {
 	}
 	
 	@Override
-	public void save(Vote v) {
-		repo.save(v);
+	public Vote save(Vote v) {
+		return repo.save(v);
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class VoteServiceImpl implements VoteService {
 
 	@Override
 	public List<Vote> findVoteByVotable(Votable v) {
-		return repo.finByVotable(v);
+		return repo.findByVotable(v);
 	}
 
 	@Override

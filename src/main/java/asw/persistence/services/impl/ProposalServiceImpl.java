@@ -25,8 +25,8 @@ public class ProposalServiceImpl implements ProposalService {
 	}
 
 	@Override
-	public void save(Proposal proposal) {
-		repo.save(proposal);
+	public Proposal save(Proposal proposal) {
+		return repo.save(proposal);
 	}
 
 	@Override

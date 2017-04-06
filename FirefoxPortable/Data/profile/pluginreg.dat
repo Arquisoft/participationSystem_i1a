@@ -1,0 +1,20 @@
+Generated File. Do not edit.
+
+[HEADER]
+Version|0.17|$
+Arch|x86_64-msvc|$
+
+[PLUGINS]
+NPSWF64_19_0_0_226.dll|$
+C:\WINDOWS\system32\Macromed\Flash\NPSWF64_19_0_0_226.dll|$
+19.0.0.226|$
+1445037613921|0|0|0|$
+Shockwave Flash 19.0 r0|$
+Shockwave Flash|$
+2
+0|application/x-shockwave-flash|Adobe Flash movie|swf|$
+1|application/futuresplash|FutureSplash movie|spl|$
+
+[INVALID]
+C:\Users\Pabloski\AppData\LocalLow\Unity\WebPlayer\loader\npUnity3D32.dll|$
+1450364880000|$
