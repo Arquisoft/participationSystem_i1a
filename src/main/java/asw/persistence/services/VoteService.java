@@ -5,6 +5,7 @@ import java.util.List;
 import asw.model.impl.User;
 import asw.model.impl.Votable;
 import asw.model.impl.Vote;
+import asw.model.types.KeyVote;
 
 public interface VoteService {
 

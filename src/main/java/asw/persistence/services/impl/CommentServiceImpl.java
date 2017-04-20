@@ -16,11 +16,12 @@ import asw.persistence.services.CommentService;
 public class CommentServiceImpl implements CommentService {
 
 	private CommentRepository repo;
-	private ProposalRepository proposalRepo;
+    private ProposalRepository proposalRepo;
 	
 	@Autowired
-	public CommentServiceImpl(CommentRepository repository) {
+	public CommentServiceImpl(CommentRepository repository, ProposalRepository proposalRepo) {
 		this.repo = repository;
+		this.proposalRepo = proposalRepo;
 	}
 	
 	@Override
@@ -77,11 +78,11 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
-	public Comment findByProposalAndId(Long proposalId, Long id) throws Exception {
+	public Comment findByProposalAndId(Long proposalId, Long id) {
 		Proposal p = proposalRepo.findOne(proposalId);
 		Comment c = repo.findOne(id);
 		if(!p.getComments().contains(c))
-			throw new Exception("The proposal does not contain the specified comment");
+			throw new IllegalStateException("The proposal does not contain the specified comment");
 		return c;
 	}
 

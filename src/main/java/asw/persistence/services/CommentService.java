@@ -16,7 +16,7 @@ public interface CommentService {
 	public Comment findById(Long id);
 	public List<Comment> findByUser(User user);
 	public List<Comment> findByProposal(Proposal proposal);
-	public Comment findByProposalAndId(Long proposalId, Long id) throws Exception;
+	public Comment findByProposalAndId(Long proposalId, Long id);
 	
 	public void updateComment(Long proposalId, Comment comment);
 	public void clearTable();

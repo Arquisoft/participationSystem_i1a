@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import asw.model.types.KeyVote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class VoteServiceImpl implements VoteService {
 	
 	@Override
 	public Vote save(Vote v) {
-		return repo.save(v);
+	    return repo.save(v);
 	}
 
 	@Override

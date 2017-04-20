@@ -27,7 +27,7 @@ import asw.producers.KafkaProducer;
 @Controller
 public class MainController {
 
-	private User loggedinUser;
+	private Long loggedinUserId;
 	
     @Autowired
     private KafkaProducer kafkaProducer;
@@ -70,11 +70,11 @@ public class MainController {
 	}
 	
 	@RequestMapping("/loginCheck")
-	public String loginCheck(Model model,
-			@ModelAttribute User loginUser){
+	public String loginCheck(Model model, @ModelAttribute User loginUser){
 		
-		loggedinUser = us.findUserByLoginAndPassword(loginUser.getLogin(), loginUser.getPassword());
-		
+		User loggedinUser = us.findUserByLoginAndPassword(loginUser.getLogin(), loginUser.getPassword());
+		this.loggedinUserId = loggedinUser.getId();
+
 		if(loggedinUser != null){
 			if (loggedinUser.isAdmin()) {
 				return "admin";
@@ -97,8 +97,7 @@ public class MainController {
 */	
 	
 	@RequestMapping("/createProposal")
-	public String createProposal(Model model,
-			@ModelAttribute Proposal createProposal) {
+	public String createProposal(Model model, @ModelAttribute Proposal createProposal) {
 
 		Proposal proposal = new Proposal();
 		proposal.setTitle(createProposal.getTitle());
@@ -129,20 +128,23 @@ public class MainController {
 
 	@RequestMapping("/upvoteProposal/{id}")
 	public String upvoteProposal(Model model, @PathVariable("id") Long id) {
-		
-		Proposal prop = ps.findById(id);
-		
-		if (prop != null && loggedinUser != null) {
+
+	    User loggedinUser = us.findById(loggedinUserId);
+        Proposal prop = ps.findById(id);
+
+        if (prop != null && loggedinUser != null) {
 			Vote v = new Vote(loggedinUser, prop, VoteType.POSITIVE);
 			vs.save(v);
 			ps.updateProposal(prop);
 		}
+
 		return "redirect:/selectProposal/" + id;
 	}
 
 	@RequestMapping("/downvoteProposal/{id}")
 	public String downvoteProposal(Model model, @PathVariable("id") Long id) {
-		
+
+	    User loggedinUser = us.findById(loggedinUserId);
 		Proposal prop = ps.findById(id);
 		
 		if (prop != null && loggedinUser != null) {
@@ -150,13 +152,14 @@ public class MainController {
 			vs.save(v);
 			ps.updateProposal(prop);
 		}
+
 		return "redirect:/selectProposal/" + id;
 	}
 
 	@RequestMapping("/createComment/{id}")
-	public String commentProposal(Model model, @PathVariable("id") Long id,
-			@ModelAttribute Comment createComment) {
-		
+	public String commentProposal(Model model, @PathVariable("id") Long id, @ModelAttribute Comment createComment) {
+
+        User loggedinUser = us.findById(loggedinUserId);
 		Comment comment = new Comment();
 		comment.setContent(createComment.getContent());
 		Proposal p = ps.findById(id);
@@ -169,10 +172,9 @@ public class MainController {
 	}
 
 	@RequestMapping("/upvoteComment/{proposalId}/{id}")
-	public String upvoteComment(Model model,
-			@PathVariable("proposalId") Long proposalId,
-			@PathVariable("id") Long id) throws Exception {
-		
+	public String upvoteComment(Model model, @PathVariable("proposalId") Long proposalId, @PathVariable("id") Long id){
+
+        User loggedinUser = us.findById(loggedinUserId);
 		Comment c = cs.findByProposalAndId(proposalId, id);
 		
 		if (c != null && loggedinUser != null) {
@@ -185,10 +187,9 @@ public class MainController {
 	}
 
 	@RequestMapping("/downvoteComment/{proposalId}/{id}")
-	public String downvoteComment(Model model,
-			@PathVariable("proposalId") Long proposalId,
-			@PathVariable("id") Long id) throws Exception {
-		
+	public String downvoteComment(Model model, @PathVariable("proposalId") Long proposalId, @PathVariable("id") Long id){
+
+	    User loggedinUser = us.findById(loggedinUserId);
 		Comment c = cs.findByProposalAndId(proposalId, id);
 		
 		if (c != null && loggedinUser != null) {

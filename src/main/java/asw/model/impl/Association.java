@@ -7,8 +7,8 @@ public class Association {
 	public static class MakeVote {
 
 		public static void link(User User, Vote vote, Votable votable) {
-			vote._setVotable(votable);
-			vote._setUser(User);
+			vote.setVotable(votable);
+			vote.setUser(User);
 			
 			if(vote.getVoteType().equals(VoteType.POSITIVE))
 				votable.incrementUpvotes();
@@ -23,8 +23,8 @@ public class Association {
 			votable._getVotes().remove(vote);
 			User._getVotes().remove(vote);
 
-			vote._setVotable(null);
-			vote._setUser(null);
+			vote.setVotable(null);
+			vote.setUser(null);
 
 			if(vote.getVoteType().equals(VoteType.POSITIVE))
 				votable.decrementUpvotes();
