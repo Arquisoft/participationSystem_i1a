@@ -1,13 +1,34 @@
 package asw.model.types;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Embeddable
 public class KeyVote implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	Long user;
-	Long votable;
+    @Column(name = "userId")
+    Long user;
+
+    @Column(name = "votableId")
+    Long votable;
+
+	public KeyVote(){}
+
+	public KeyVote(Long user, Long votable){
+	    this.user = user;
+	    this.votable = votable;
+    }
+
+    public Long getUser() {
+        return user;
+    }
+
+    public Long getVotable() {
+        return votable;
+    }
 
     @Override
 	public int hashCode() {

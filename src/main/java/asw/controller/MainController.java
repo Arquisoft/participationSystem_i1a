@@ -17,7 +17,6 @@ import asw.model.impl.User;
 import asw.model.impl.Vote;
 import asw.model.types.Topic;
 import asw.model.types.VoteType;
-import asw.persistence.FillDatabase;
 import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;
@@ -43,21 +42,7 @@ public class MainController {
     
     @Autowired
     private VoteService vs;
-    
-/**
-    @RequestMapping("/")
-    public String landing(Model model) {
-        model.addAttribute("message", new Message());
-        return "index";
-    }
-    
-    @RequestMapping("/send")
-    public String send(Model model, @ModelAttribute Message message) {
-        kafkaProducer.send("exampleTopic", message.getMessage());
-        return "redirect:/";
-    }
-*/
-    
+
     @RequestMapping("/")
 	public ModelAndView landing(Model model) {
 		return new ModelAndView("redirect:" + "/login");
@@ -84,25 +69,16 @@ public class MainController {
 		}
 		return "login";
 	}
-/*
-	@RequestMapping("/user")
-	public String userHome(Model model) {
-		return "user";
-	}
-	
-	@RequestMapping("/admin")
-	public String adminHome(Model model){
-		return "admin";
-	}
-*/	
-	
+
 	@RequestMapping("/createProposal")
 	public String createProposal(Model model, @ModelAttribute Proposal createProposal) {
 
 		Proposal proposal = new Proposal();
+        User loggedinUser = us.findById(loggedinUserId);
+		proposal.setUser(loggedinUser);
 		proposal.setTitle(createProposal.getTitle());
 		proposal.setDescription(createProposal.getDescription());
-		proposal.setTopic(createProposal.getTopic());
+		proposal.setTopicAux(createProposal.getTopicAux());
 
 		if (!proposal.checkNotAllowedWords()) {
 			ps.save(proposal);
@@ -133,8 +109,22 @@ public class MainController {
         Proposal prop = ps.findById(id);
 
         if (prop != null && loggedinUser != null) {
-			Vote v = new Vote(loggedinUser, prop, VoteType.POSITIVE);
-			vs.save(v);
+            Vote v = vs.findVoteByUserByVotable(loggedinUser, prop);
+
+            if(v != null) {
+                Association.MakeVote.unlink(loggedinUser, v, prop);
+                vs.deleteVote(v);
+
+                if (v.getVoteType() != VoteType.POSITIVE) {
+                    v = new Vote(loggedinUser, prop, VoteType.POSITIVE);
+                    vs.save(v);
+                }
+            }
+            else{
+                v = new Vote(loggedinUser, prop, VoteType.POSITIVE);
+                vs.save(v);
+            }
+
 			ps.updateProposal(prop);
 		}
 
@@ -148,9 +138,23 @@ public class MainController {
 		Proposal prop = ps.findById(id);
 		
 		if (prop != null && loggedinUser != null) {
-			Vote v = new Vote(loggedinUser, prop, VoteType.NEGATIVE);
-			vs.save(v);
-			ps.updateProposal(prop);
+            Vote v = vs.findVoteByUserByVotable(loggedinUser, prop);
+
+            if(v != null) {
+                Association.MakeVote.unlink(loggedinUser, v, prop);
+                vs.deleteVote(v);
+
+                if (v.getVoteType() != VoteType.NEGATIVE) {
+                    v = new Vote(loggedinUser, prop, VoteType.NEGATIVE);
+                    vs.save(v);
+                }
+            }
+            else{
+                v = new Vote(loggedinUser, prop, VoteType.NEGATIVE);
+                vs.save(v);
+            }
+
+            ps.updateProposal(prop);
 		}
 
 		return "redirect:/selectProposal/" + id;
@@ -178,11 +182,25 @@ public class MainController {
 		Comment c = cs.findByProposalAndId(proposalId, id);
 		
 		if (c != null && loggedinUser != null) {
-			Vote v = new Vote (loggedinUser, c, VoteType.POSITIVE);
-			vs.save(v);
-			cs.updateComment(proposalId, c);
+            Vote v = vs.findVoteByUserByVotable(loggedinUser, c);
+
+            if(v != null) {
+                Association.MakeVote.unlink(loggedinUser, v, c);
+                vs.deleteVote(v);
+
+                if( v.getVoteType() != VoteType.POSITIVE){
+                    v = new Vote(loggedinUser, c, VoteType.POSITIVE);
+                    vs.save(v);
+                }
+            }
+            else{
+                v = new Vote(loggedinUser, c, VoteType.POSITIVE);
+                vs.save(v);
+            }
+
+            cs.updateComment(proposalId, c);
 		}
-		
+
 		return "redirect:/selectProposal/" + proposalId;
 	}
 
@@ -193,9 +211,23 @@ public class MainController {
 		Comment c = cs.findByProposalAndId(proposalId, id);
 		
 		if (c != null && loggedinUser != null) {
-			Vote v = new Vote(loggedinUser, c, VoteType.NEGATIVE);
-			vs.save(v);
-			cs.updateComment(proposalId, c);
+            Vote v = vs.findVoteByUserByVotable(loggedinUser, c);
+
+            if(v != null) {
+                Association.MakeVote.unlink(loggedinUser, v, c);
+                vs.deleteVote(v);
+
+                if(v.getVoteType() != VoteType.NEGATIVE) {
+                    v = new Vote(loggedinUser, c, VoteType.NEGATIVE);
+                    vs.save(v);
+                }
+            }
+            else{
+                v = new Vote(loggedinUser, c, VoteType.NEGATIVE);
+                vs.save(v);
+            }
+
+            cs.updateComment(proposalId, c);
 		}
 		
 		return "redirect:/selectProposal/" + proposalId;

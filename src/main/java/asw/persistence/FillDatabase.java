@@ -1,6 +1,7 @@
 package asw.persistence;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -48,9 +49,20 @@ public class FillDatabase {
 		} catch (DataIntegrityViolationException e) {
 			System.out.println("Some errors occur during the initialization of the database (;-;) ");
 		}
+
+		check();
 	}
-	
-	private void initializeData() {
+
+    private void check() {
+	    List<User> t = uS.findAll();
+	    List<Comment> te = cS.findAll();
+	    List<Proposal> tes = pS.findAll();
+	    List<Vote> test = vS.findAll();
+
+	    System.out.println("Oh boy");
+    }
+
+    private void initializeData() {
 		initializeUsers();
 		initializeProposals();
 		initializeComments();

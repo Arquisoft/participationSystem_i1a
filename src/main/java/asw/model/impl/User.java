@@ -43,13 +43,13 @@ public class User {
 	private String password;
 	private String login;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Proposal> proposals = new HashSet<Proposal>();
 	
 	@OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
-	private Set<Vote> votes = new HashSet<>();
+	private Set<Vote> votes = new HashSet<Vote>();
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private Set<Comment> comments = new HashSet<Comment>();
 	
 	public User(){}

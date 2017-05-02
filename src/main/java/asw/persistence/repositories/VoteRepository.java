@@ -2,6 +2,7 @@ package asw.persistence.repositories;
 
 import java.util.List;
 
+import asw.model.impl.Proposal;
 import asw.model.types.KeyVote;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
@@ -16,5 +17,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
 	List<Vote> findByUser(User user);
 	List<Vote> findByVotable(Votable v);
-	
+
+    Vote findByUserAndVotable(User loggedinUser, Votable v);
+
 }

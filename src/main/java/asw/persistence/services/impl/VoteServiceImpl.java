@@ -1,9 +1,11 @@
 package asw.persistence.services.impl;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import asw.model.impl.Proposal;
 import asw.model.types.KeyVote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,7 +57,17 @@ public class VoteServiceImpl implements VoteService {
 		return repo.findByVotable(v);
 	}
 
-	@Override
+    @Override
+    public Vote findVoteByUserByVotable(User loggedinUser, Votable v) {
+        return repo.findByUserAndVotable(loggedinUser, v);
+    }
+
+    @Override
+    public void deleteVote(Vote v){
+	    repo.delete(v);
+    }
+
+    @Override
 	public void clearTable() {
 		repo.deleteAll();
 	}

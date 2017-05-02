@@ -1,16 +1,18 @@
 package asw.model.impl;
 
+import asw.model.types.VoteType;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Votable {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private Long id;
 	
 	@OneToMany(mappedBy = "votable", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
@@ -30,7 +32,9 @@ public abstract class Votable {
 	}
 	
 	public int getScore() {
-		return upvotes - downvotes;
+        process();
+        int number = upvotes - downvotes;
+        return number;
 	}
 	
 	public Set<Vote> getVotes(){
@@ -38,11 +42,13 @@ public abstract class Votable {
 	}
 
 	public int getUpvotes() {
-		return upvotes;
+		process();
+	    return upvotes;
 	}
 
 	public int getDownvotes() {
-		return downvotes;
+		process();
+	    return downvotes;
 	}
 
 	public void incrementUpvotes() {
@@ -60,4 +66,14 @@ public abstract class Votable {
 	public void decrementDownvotes() {
 		this.downvotes--;
 	}
+
+	private void process(){
+	    upvotes = 0; downvotes = 0;
+	    for(Vote v: votes){
+	        if( v.getVoteType() == VoteType.POSITIVE)
+	            upvotes++;
+	        if ( v.getVoteType() == VoteType.NEGATIVE)
+	            downvotes++;
+        }
+    }
 }

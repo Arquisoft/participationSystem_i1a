@@ -2,7 +2,6 @@ package asw.model.impl;
 
 import javax.persistence.*;
 
-import asw.model.types.KeyVote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -14,7 +13,6 @@ import asw.producers.VoteNotifier;
 @Table(name = "TVotes")
 //@IdClass(KeyVote.class)
 public class Vote {
-
 
     public Long getId() {
         return id;
@@ -32,14 +30,13 @@ public class Vote {
 	@Autowired
 	private VoteNotifier notifier;
 
-//	@Id
-    @ManyToOne//(cascade = CascadeType.Merge)
+    @ManyToOne
     private User user;
-	
-//	@Id
+
     @ManyToOne
 	private Votable votable;
 
+    @Enumerated(EnumType.STRING)
 	private VoteType voteType;
 
 	Vote() {}

@@ -4,11 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import asw.model.types.NotAllowedWords;
 import asw.model.types.Topic;
@@ -22,6 +18,7 @@ public class Proposal extends Votable {
 	
 	private String title;
 	private String description;
+	@Enumerated(EnumType.STRING)
 	private Topic topic;
 	private String topicAux;
 	private Date created;
@@ -30,7 +27,7 @@ public class Proposal extends Votable {
 	@ElementCollection
 	private Set<String> notAllowedWords = NotAllowedWords.getInstance().getSet();
 	
-	@OneToMany(mappedBy = "proposal")
+	@OneToMany(mappedBy = "proposal", fetch = FetchType.EAGER)
 	private Set<Comment> comments = new HashSet<>();	
 	
 	public Proposal(){}
