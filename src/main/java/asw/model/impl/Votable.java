@@ -2,10 +2,10 @@ package asw.model.impl;
 
 import asw.model.types.VoteType;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

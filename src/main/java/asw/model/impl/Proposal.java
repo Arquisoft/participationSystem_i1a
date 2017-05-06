@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import asw.model.types.MinSupport;
 import asw.model.types.NotAllowedWords;
 import asw.model.types.Topic;
 
@@ -33,29 +34,43 @@ public class Proposal extends Votable {
 	public Proposal(){}
 	
 	public Proposal(User user, String tit) {
-		super();
-		Association.Propose.link(user, this);
 		this.title = tit;
-	}
+        this.comments = new HashSet<Comment>();
+        this.notAllowedWords = NotAllowedWords.getInstance().getSet();
+        this.minSupport = MinSupport.getInstance().getSupport();
+        Association.Propose.link(user, this);
+    }
 	
 	public Proposal(User user, String tit, String description){
-		this(user, tit);
+		this.title = tit;
 		this.description = description;
+        this.comments = new HashSet<Comment>();
+        this.notAllowedWords = NotAllowedWords.getInstance().getSet();
+        this.minSupport = MinSupport.getInstance().getSupport();
+        Association.Propose.link(user, this);
 	}
 	
 	public Proposal(User user, String tit, String desc, String topic){
-		this(user, tit, desc);
+        this.title = tit;
+        this.description = desc;
 		setTopicAux(topic);
+		this.minSupport = MinSupport.getInstance().getSupport();
 		this.created = new Date();
 		this.comments = new HashSet<Comment>();
+        this.notAllowedWords = NotAllowedWords.getInstance().getSet();
+        Association.Propose.link(user, this);
 	}
 	
-	public Proposal(User user, String tit, String desc, 
-			String topic, int minSupport, Set<String> l){
-		this(user, tit, desc, topic);
+	public Proposal(User user, String tit, String desc, String topic, int minSupport, Set<String> l){
+        this.title = tit;
+        this.description = desc;
+        setTopicAux(topic);
+        this.created = new Date();
+        this.comments = new HashSet<Comment>();
 		this.minSupport = minSupport;
-		this.notAllowedWords = l;
-	}
+        this.notAllowedWords = l;
+        Association.Propose.link(user, this);
+    }
 	
 	public void setDescription(String desc){
 		this.description = desc;
@@ -128,7 +143,6 @@ public class Proposal extends Votable {
 			}
 		}
 		return true;
-		
 	}
 
 	public void setUser(User user) {

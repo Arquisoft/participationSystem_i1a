@@ -26,8 +26,8 @@ import asw.producers.KafkaProducer;
 @Controller
 public class MainController {
 
-	private Long loggedinUserId;
-	
+	private User loggedinUser;
+
     @Autowired
     private KafkaProducer kafkaProducer;
 
@@ -57,8 +57,8 @@ public class MainController {
 	@RequestMapping("/loginCheck")
 	public String loginCheck(Model model, @ModelAttribute User loginUser){
 		
-		User loggedinUser = us.findUserByLoginAndPassword(loginUser.getLogin(), loginUser.getPassword());
-		this.loggedinUserId = loggedinUser.getId();
+		User user = us.findUserByLoginAndPassword(loginUser.getLogin(), loginUser.getPassword());
+		this.loggedinUser = user;
 
 		if(loggedinUser != null){
 			if (loggedinUser.isAdmin()) {
@@ -70,17 +70,28 @@ public class MainController {
 		return "login";
 	}
 
+    @RequestMapping("/user")
+    public String user(Model model) {
+        model.addAttribute("createProposal", new Proposal());
+        return "user";
+    }
+
+    @RequestMapping("/admin")
+    public String admin(Model model) {
+        return "admin";
+    }
+
 	@RequestMapping("/createProposal")
 	public String createProposal(Model model, @ModelAttribute Proposal createProposal) {
 
-		Proposal proposal = new Proposal();
-        User loggedinUser = us.findById(loggedinUserId);
-		proposal.setUser(loggedinUser);
-		proposal.setTitle(createProposal.getTitle());
-		proposal.setDescription(createProposal.getDescription());
-		proposal.setTopicAux(createProposal.getTopicAux());
+        Proposal proposal = new Proposal(
+            loggedinUser,
+            createProposal.getTitle(),
+            createProposal.getDescription(),
+            createProposal.getTopicAux()
+        );
 
-		if (!proposal.checkNotAllowedWords()) {
+		if (proposal.checkNotAllowedWords()) {
 			ps.save(proposal);
 			kafkaProducer.send("createdProposal", "created proposal");
 		}
@@ -92,7 +103,7 @@ public class MainController {
 	public String deleteProposal(Model model, @PathVariable("id") Long id) {
 		Proposal p = ps.findById(id);
 		ps.delete(p);
-		return "redirect:/user";
+		return "redirect:/admin";
 	}
 	
 	@RequestMapping("/selectProposal/{id}")
@@ -105,7 +116,6 @@ public class MainController {
 	@RequestMapping("/upvoteProposal/{id}")
 	public String upvoteProposal(Model model, @PathVariable("id") Long id) {
 
-	    User loggedinUser = us.findById(loggedinUserId);
         Proposal prop = ps.findById(id);
 
         if (prop != null && loggedinUser != null) {
@@ -134,7 +144,6 @@ public class MainController {
 	@RequestMapping("/downvoteProposal/{id}")
 	public String downvoteProposal(Model model, @PathVariable("id") Long id) {
 
-	    User loggedinUser = us.findById(loggedinUserId);
 		Proposal prop = ps.findById(id);
 		
 		if (prop != null && loggedinUser != null) {
@@ -163,12 +172,13 @@ public class MainController {
 	@RequestMapping("/createComment/{id}")
 	public String commentProposal(Model model, @PathVariable("id") Long id, @ModelAttribute Comment createComment) {
 
-        User loggedinUser = us.findById(loggedinUserId);
-		Comment comment = new Comment();
-		comment.setContent(createComment.getContent());
-		Proposal p = ps.findById(id);
-				
-		Association.MakeComment.link(loggedinUser, comment, p);
+        Proposal p = ps.findById(id);
+
+        Comment comment = new Comment(
+            loggedinUser,
+            createComment.getContent(),
+            p
+        );
 		
 		cs.save(comment);
 		kafkaProducer.send("createdComment", "created comment");
@@ -178,7 +188,6 @@ public class MainController {
 	@RequestMapping("/upvoteComment/{proposalId}/{id}")
 	public String upvoteComment(Model model, @PathVariable("proposalId") Long proposalId, @PathVariable("id") Long id){
 
-        User loggedinUser = us.findById(loggedinUserId);
 		Comment c = cs.findByProposalAndId(proposalId, id);
 		
 		if (c != null && loggedinUser != null) {
@@ -207,7 +216,6 @@ public class MainController {
 	@RequestMapping("/downvoteComment/{proposalId}/{id}")
 	public String downvoteComment(Model model, @PathVariable("proposalId") Long proposalId, @PathVariable("id") Long id){
 
-	    User loggedinUser = us.findById(loggedinUserId);
 		Comment c = cs.findByProposalAndId(proposalId, id);
 		
 		if (c != null && loggedinUser != null) {
