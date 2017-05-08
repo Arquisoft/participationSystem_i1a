@@ -7,6 +7,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
@@ -34,17 +35,14 @@ import asw.persistence.services.VoteService;
 @SpringBootTest
 public class DBTest {
 
-	private User diego = new User("Diego","Freijo", "diego@uniovi.es", 
-			createDate("13/06/1996"), "Calle de Avilés", "Española", "12345678A");
-	private User dani = new User("Daniel", "Fernandez", "daniel@uniovi.es", 
-			createDate("02/08/1996"), "Calle de Tineo", "Española", "87654321B");
-	private Set<String> not = NotAllowedWords.getInstance().getSet();
-	private Proposal prop = new Proposal(diego, "One proposal", "description of the proposal");
-	private Proposal prop2 = new Proposal(diego, "One proposal", "description of the ass", "SPORTS", 2, not);
-	private Comment comment1 = new Comment(diego, "content of the comment", prop);
-	private Comment comment2 = new Comment(dani, "content of the comment 2", prop);
-	private Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
-	private Vote v2 = new Vote(dani, prop, VoteType.POSITIVE);
+	private User diego;
+	private User dani;
+	private Proposal prop;
+	private Proposal prop2;
+	private Comment comment1;
+	private Comment comment2;
+	private Vote v1;
+	private Vote v2;
 		
 	@Autowired
 	private UserService uS;
@@ -65,9 +63,22 @@ public class DBTest {
 	}
 	
 	private void addData() {
+	    vS.clearTable();
 		cS.clearTable();
 		pS.clearTable();
 		uS.clearTable();
+
+        diego = new User("Diego","Freijo", "diego@uniovi.es",
+                createDate("13/06/1996"), "Calle de Avilés", "Española", "12345678A");
+
+        dani = new User("Daniel", "Fernandez", "daniel@uniovi.es",
+                createDate("02/08/1996"), "Calle de Tineo", "Española", "87654321B");
+
+        prop = new Proposal(diego, "One proposal", "description of the proposal", "HEALTHCARE");
+        prop2 = new Proposal(diego, "One proposal", "another description of the ass", "SPORTS");
+        comment1 = new Comment(diego, "content of the comment", prop);
+        comment2 = new Comment(dani, "content of the comment 2", prop);
+
 		diego = uS.save(diego);
 		dani = uS.save(dani);
 		prop = pS.save(prop);
@@ -125,11 +136,11 @@ public class DBTest {
 	
 	@Test
 	public void makeVoteTest() {
-		Vote v1 = new Vote(diego, prop, VoteType.POSITIVE);
+        v1 = new Vote(diego, prop, VoteType.POSITIVE);
 		vS.save(v1);
 		assertEquals(1, diego.getVotes().size());
 		assertEquals(1, prop.getScore());
-		Vote v2 = new Vote(dani, prop, VoteType.POSITIVE);
+        v2 = new Vote(dani, prop, VoteType.POSITIVE);
 		vS.save(v2);
 		assertEquals(1, dani.getVotes().size());
 		assertEquals(2, prop.getScore());

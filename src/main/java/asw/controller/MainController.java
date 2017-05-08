@@ -3,6 +3,7 @@ package asw.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import asw.persistence.FillDatabase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,6 +51,8 @@ public class MainController {
 
 	@RequestMapping("/login")
 	public String login(Model model) {
+        FillDatabase fd = new FillDatabase();
+        fd.fill();
 		model.addAttribute("loginUser", new User());
 		return "login";
 	}
