@@ -1,12 +1,17 @@
 package asw.model.impl;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import asw.model.types.VoteType;
-import asw.producers.VoteNotifier;
 
 @Entity
 @Configurable
@@ -26,10 +31,6 @@ public class Vote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-	@Transient
-	@Autowired
-	private VoteNotifier notifier;
-
     @ManyToOne
     private User user;
 
@@ -44,9 +45,6 @@ public class Vote {
 	public Vote(User user, Votable votable, VoteType voteType) {
 		this.voteType=voteType;
 		Association.MakeVote.link(user, this, votable);
-		if (notifier != null) {
-			notifier.notifyNewVote(this);
-		}
 	}
 
     public void setUser(User user) {

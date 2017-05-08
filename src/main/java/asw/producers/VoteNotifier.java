@@ -1,7 +1,7 @@
 package asw.producers;
 
-import asw.model.impl.Vote;
+import asw.model.impl.Votable;
 
 public interface VoteNotifier {
-	public void notifyNewVote(Vote vote);
+	void notifyNewVote(Votable votable, boolean positive);
 }
