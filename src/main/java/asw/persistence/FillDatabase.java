@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import asw.model.impl.Vote;
-import asw.model.types.VoteType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -14,7 +12,8 @@ import org.springframework.stereotype.Service;
 import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
 import asw.model.impl.User;
-import asw.model.types.Topic;
+import asw.model.impl.Vote;
+import asw.model.types.VoteType;
 import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;

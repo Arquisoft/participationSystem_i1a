@@ -7,9 +7,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,9 +21,9 @@ import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
 import asw.model.impl.User;
 import asw.model.impl.Vote;
-import asw.model.types.NotAllowedWords;
 import asw.model.types.Topic;
 import asw.model.types.VoteType;
+import asw.persistence.FillDatabase;
 import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;
@@ -52,14 +51,29 @@ public class DBTest {
 	private ProposalService pS;
 	@Autowired
 	private VoteService vS;
+	@Autowired
+	private FillDatabase fD;
+	private static FillDatabase staticFd;
 	
 	@Before
 	public void setUp() {
+		if (staticFd == null) {
+			staticFd = fD;
+		}
 		try {
 			addData();
 		} catch(DataIntegrityViolationException e){
 			e.printStackTrace();
 		}
+	}
+	
+	@AfterClass
+	public static void resetDB() {
+		// We give for granted FillDatabase has been called either
+		// at application startup or after a previous test.
+		//
+		// We clean up the database for future tests and/or use.
+		staticFd.fill();
 	}
 	
 	private void addData() {
