@@ -1,8 +1,8 @@
 package asw.cucumber;
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
+import asw.cucumber.steps.DriverFactory;
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
 
@@ -10,13 +10,8 @@ import cucumber.api.junit.Cucumber;
 @CucumberOptions(features = "src/test/resources/features")
 public class CucumberTest{
 	
-	@BeforeClass
-    public static void setUp() {
-        CucumberSteps.setUp();
-    }
-
-    @AfterClass
-    public static void tearDown() {
-        CucumberSteps.tearDown();
-    }
+	@AfterClass
+	public static void tearDown() {
+		DriverFactory.getDriver().quit();
+	}
 }

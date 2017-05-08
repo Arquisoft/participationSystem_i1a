@@ -36,7 +36,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="p : ${proposals}">
+						<tr th:each="p : ${proposals}" th:id="${'proposal' + p.getId()}">
 							<td th:text="${p.getTitle()}"></td>
 							<td th:text="${p.getTopicAux()}"></td>
 							<td th:text="${p.getScore()}"></td>
@@ -50,32 +50,32 @@
 		</div>
 		<div class="col-md-1"></div>
 		<div class="col-md-5">
-            <h3>Create a proposal</h3>
-            <form role="form" th:action="@{/createProposal}"
-                  th:object="${createProposal}" method="POST">
-                <div class="form-group">
-                    <label for="title">Title: </label>
-                    <input type="text" id="title" th:field="*{title}"
-                           class="form-control" placeholder="Title of the proposal" />
-                </div>
-                <div class="form-group">
-                    <label for="description">Description: </label>
-                    <textarea class="form-control" rows="5" id="description"
-                              th:field="*{description}"
-                              placeholder="Description of your proposal"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="topic">Topic: </label> <select id="topic"
-                                                               th:field="*{topicAux}" class="form-control">
-                    <option selected="true" value="base">Select a topic</option>
-                    <option th:each="top:${topics}" th:value="${top}" th:text="${top}"
-                            th:id="${top}"></option>
-                </select>
-                </div>
+			<h3>Create a proposal</h3>
+			<form role="form" th:action="@{/createProposal}"
+				th:object="${createProposal}" method="POST">
+				<div class="form-group">
+					<label for="title">Title: </label> <input type="text" id="title"
+						th:field="*{title}" class="form-control"
+						placeholder="Title of the proposal" />
+				</div>
+				<div class="form-group">
+					<label for="description">Description: </label>
+					<textarea class="form-control" rows="5" id="description"
+						th:field="*{description}"
+						placeholder="Description of your proposal"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="topic">Topic: </label> <select id="topic"
+						th:field="*{topicAux}" class="form-control">
+						<option selected="true" value="base">Select a topic</option>
+						<option th:each="top:${topics}" th:value="${top}" th:text="${top}"
+							th:id="${top}"></option>
+					</select>
+				</div>
 
-                <button type="submit" class="btn btn-default" id="submit">Submit
-                    proposal</button>
-            </form>
+				<button type="submit" class="btn btn-default" id="submit">Submit
+					proposal</button>
+			</form>
 		</div>
 		<div class="col-md-3"></div>
 	</div>
