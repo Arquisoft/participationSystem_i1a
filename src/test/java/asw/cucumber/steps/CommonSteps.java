@@ -4,10 +4,13 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import asw.Application;
+import asw.persistence.FillDatabase;
+import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 import cucumber.api.junit.Cucumber;
@@ -17,6 +20,18 @@ import cucumber.api.junit.Cucumber;
 @SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class CommonSteps {
 
+	@Autowired
+	FillDatabase fD;
+	
+	@After
+	public void cleanup() {
+		// We give for granted FillDatabase has been called either
+		// at application startup or after a previous test.
+		//
+		// We clean up the database for future tests and/or use.
+		fD.fill();
+	}
+	
 	private static RemoteWebDriver driver = DriverFactory.getDriver();
 	private static String BASE_URL = "http://localhost:8080/";
 

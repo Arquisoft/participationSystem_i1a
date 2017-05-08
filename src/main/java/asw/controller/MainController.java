@@ -51,8 +51,6 @@ public class MainController {
 
 	@RequestMapping("/login")
 	public String login(Model model) {
-        FillDatabase fd = new FillDatabase();
-        fd.fill();
 		model.addAttribute("loginUser", new User());
 		return "login";
 	}
