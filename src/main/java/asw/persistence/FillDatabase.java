@@ -133,6 +133,9 @@ public class FillDatabase {
     }
 
     private void initializeVotes() {
+    	// We give for granted this initialization occurs before 
+    	// the Dashboard starts up.
+    	// This avoids stacking messages during test setup.
         v1 = new Vote(u4, p1, VoteType.POSITIVE);
         v2 = new Vote(u3, p1, VoteType.POSITIVE);
         v3 = new Vote(u2, p1, VoteType.NEGATIVE);

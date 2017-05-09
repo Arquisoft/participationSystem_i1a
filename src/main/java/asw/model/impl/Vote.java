@@ -8,7 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import asw.model.types.VoteType;
@@ -39,7 +41,7 @@ public class Vote {
 
     @Enumerated(EnumType.STRING)
 	private VoteType voteType;
-
+    
 	Vote() {}
 
 	public Vote(User user, Votable votable, VoteType voteType) {

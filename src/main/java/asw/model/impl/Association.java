@@ -1,41 +1,25 @@
 package asw.model.impl;
 
-import javax.persistence.Transient;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-
-import asw.model.types.*;
-import asw.producers.VoteNotifier;
+import asw.model.types.VoteType;
 
 public class Association {
 
 	public static class MakeVote {
 
-		@Configurable
-		public static class NotifierWrapper {
-			@Autowired
-			private VoteNotifier notifier;
+		public static void notifyNewVote(Votable votable, boolean positive) {
 			
-			public void notifyNewVote(Votable votable, boolean positive) {
-				if (notifier != null) {
-					notifier.notifyNewVote(votable, positive);
-				}
-			}
 		}
 		
 		public static void link(User User, Vote vote, Votable votable) {
-			NotifierWrapper notifier = new NotifierWrapper();
-			
 			vote.setVotable(votable);
 			vote.setUser(User);
 			
 			if(vote.getVoteType().equals(VoteType.POSITIVE)) {
 				votable.incrementUpvotes();
-				notifier.notifyNewVote(votable, true);					
+				notifyNewVote(votable, true);					
 			} else if(vote.getVoteType().equals(VoteType.NEGATIVE)){
 				votable.incrementDownvotes();
-				notifier.notifyNewVote(votable, false);
+				notifyNewVote(votable, false);
 			}
 			
 			votable._getVotes().add(vote);
@@ -43,8 +27,6 @@ public class Association {
 		}
 
 		public static void unlink(User User, Vote vote, Votable votable) {
-			NotifierWrapper notifier = new NotifierWrapper();
-			
 			votable._getVotes().remove(vote);
 			User._getVotes().remove(vote);
 
@@ -53,10 +35,10 @@ public class Association {
 
 			if(vote.getVoteType().equals(VoteType.POSITIVE)) {
 				votable.decrementUpvotes();
-				notifier.notifyNewVote(votable, false);
+				notifyNewVote(votable, false);
 			} else if(vote.getVoteType().equals(VoteType.NEGATIVE)) {
 				votable.decrementDownvotes();
-				notifier.notifyNewVote(votable, true);
+				notifyNewVote(votable, true);
 			}
 			
 		}

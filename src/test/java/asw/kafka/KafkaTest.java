@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,13 +16,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import asw.model.impl.Proposal;
 import asw.model.impl.User;
-import asw.model.impl.Vote;
+import asw.model.impl.VoteMaker;
 import asw.model.types.VoteType;
 import asw.persistence.FillDatabase;
-import asw.persistence.services.CommentService;
 import asw.persistence.services.ProposalService;
 import asw.persistence.services.UserService;
-import asw.persistence.services.VoteService;
 import asw.producers.KafkaProducer;
 
 @RunWith(SpringRunner.class)
@@ -36,47 +35,44 @@ public class KafkaTest {
 	private KafkaProducer producer;
 	@Autowired
 	private FillDatabase fillDatabase;
+	@Autowired
+	private VoteMaker vm;
 
 	private Set<String> expectedMessages;
 	private Set<String> unexpectedMessages;
 
+	public KafkaTest() {
+		resetMessages();
+	}
+
 	@Before
 	public void setUp() throws Exception {
-		fillDatabase.fill();
+		Thread.sleep(2000);
+		resetMessages();
+	}
+
+	private void resetMessages() {
 		expectedMessages = Collections
 				.synchronizedSet(new HashSet<>());
 		unexpectedMessages = Collections
 				.synchronizedSet(new HashSet<>());
 	}
 
+	@After
+	public void cleanUp() {
+		fillDatabase.fill();
+	}
+
 	@Test
 	public void testMessages() throws Exception {
+		// Test messaging
 		expectedMessages.add("TestVote1");
-		expectedMessages.add("#$%&/()=");
+		expectedMessages.add("TestVote2");
 		for (String message : expectedMessages) {
 			producer.send("newVote", message);
 		}
-		assertReceived();
-	}
 
-	private void assertReceived() {
-		long startMillis = System.currentTimeMillis();
-		long timeOut = 5000;
-		while (expectedMessages.size() != 0
-				&& System.currentTimeMillis()
-						- startMillis < timeOut) {
-		}
-		Assert.assertEquals(
-				"Expected messages not received: " + expectedMessages,
-				0, expectedMessages.size());
-		Assert.assertEquals(
-				"Unexpected messages received: " + unexpectedMessages,
-				0, unexpectedMessages.size());
-	}
-
-	@Test
-	public void testVotes() throws Exception {
-		Set<String> expectedMessages = new HashSet<>();
+		// Test actual votes
 		Proposal prop = pS.findAll().get(0);
 		User user0 = uS.findAll().get(0);
 		User user1 = uS.findAll().get(1);
@@ -84,11 +80,27 @@ public class KafkaTest {
 		expectedMessages.add(String.format("%d;+", prop.getId()));
 		expectedMessages.add(String.format("%d;-", prop.getId()));
 
-		new Vote(user0, prop, VoteType.POSITIVE);
-		// vS.save(vote);
-		new Vote(user1, prop, VoteType.NEGATIVE);
-		// vS.save(vote);
+		vm.makeVote(user0, prop, VoteType.POSITIVE);
+		vm.makeVote(user1, prop, VoteType.NEGATIVE);
+		
 		assertReceived();
+	}
+	
+	private void assertReceived() {
+		long startMillis = System.currentTimeMillis();
+		long timeOut = 15000;
+		while (expectedMessages.size() != 0
+				&& System.currentTimeMillis()
+						- startMillis < timeOut) {
+		}
+		String errorMessage = "Expected messages not received: "
+				+ expectedMessages
+				+ "\nUnexpected messages received: "
+				+ unexpectedMessages;
+
+		Assert.assertEquals(errorMessage, 0, expectedMessages.size());
+		Assert.assertEquals(errorMessage, 0,
+				unexpectedMessages.size());
 	}
 
 	@KafkaListener(topics = "newVote")
@@ -96,6 +108,5 @@ public class KafkaTest {
 		if (!expectedMessages.remove(message)) {
 			unexpectedMessages.add(message);
 		}
-
 	}
 }

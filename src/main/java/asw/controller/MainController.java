@@ -3,7 +3,6 @@ package asw.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import asw.persistence.FillDatabase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,11 +10,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import asw.model.impl.Association;
+
 import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
 import asw.model.impl.User;
 import asw.model.impl.Vote;
+import asw.model.impl.VoteMaker;
 import asw.model.types.Topic;
 import asw.model.types.VoteType;
 import asw.persistence.services.CommentService;
@@ -43,6 +43,9 @@ public class MainController {
     
     @Autowired
     private VoteService vs;
+    
+    @Autowired
+    private VoteMaker vm;
 
     @RequestMapping("/")
 	public ModelAndView landing(Model model) {
@@ -123,17 +126,14 @@ public class MainController {
             Vote v = vs.findVoteByUserByVotable(loggedinUser, prop);
 
             if(v != null) {
-                Association.MakeVote.unlink(loggedinUser, v, prop);
-                vs.deleteVote(v);
+            	vm.deleteVote(v);
 
                 if (v.getVoteType() != VoteType.POSITIVE) {
-                    v = new Vote(loggedinUser, prop, VoteType.POSITIVE);
-                    vs.save(v);
+                    vm.makeVote(loggedinUser, prop, VoteType.POSITIVE);
                 }
             }
             else{
-                v = new Vote(loggedinUser, prop, VoteType.POSITIVE);
-                vs.save(v);
+            	vm.makeVote(loggedinUser, prop, VoteType.POSITIVE);
             }
 
 			ps.updateProposal(prop);
@@ -151,17 +151,14 @@ public class MainController {
             Vote v = vs.findVoteByUserByVotable(loggedinUser, prop);
 
             if(v != null) {
-                Association.MakeVote.unlink(loggedinUser, v, prop);
-                vs.deleteVote(v);
+                vm.deleteVote(v);
 
                 if (v.getVoteType() != VoteType.NEGATIVE) {
-                    v = new Vote(loggedinUser, prop, VoteType.NEGATIVE);
-                    vs.save(v);
+                    vm.makeVote(loggedinUser, prop, VoteType.NEGATIVE);
                 }
             }
             else{
-                v = new Vote(loggedinUser, prop, VoteType.NEGATIVE);
-                vs.save(v);
+            	vm.makeVote(loggedinUser, prop, VoteType.NEGATIVE);
             }
 
             ps.updateProposal(prop);
@@ -195,17 +192,14 @@ public class MainController {
             Vote v = vs.findVoteByUserByVotable(loggedinUser, c);
 
             if(v != null) {
-                Association.MakeVote.unlink(loggedinUser, v, c);
-                vs.deleteVote(v);
+                vm.deleteVote(v);
 
                 if( v.getVoteType() != VoteType.POSITIVE){
-                    v = new Vote(loggedinUser, c, VoteType.POSITIVE);
-                    vs.save(v);
+                    vm.makeVote(loggedinUser, c, VoteType.POSITIVE);
                 }
             }
             else{
-                v = new Vote(loggedinUser, c, VoteType.POSITIVE);
-                vs.save(v);
+            	vm.makeVote(loggedinUser, c, VoteType.POSITIVE);
             }
 
             cs.updateComment(proposalId, c);
@@ -223,17 +217,14 @@ public class MainController {
             Vote v = vs.findVoteByUserByVotable(loggedinUser, c);
 
             if(v != null) {
-                Association.MakeVote.unlink(loggedinUser, v, c);
-                vs.deleteVote(v);
+                vm.deleteVote(v);
 
                 if(v.getVoteType() != VoteType.NEGATIVE) {
-                    v = new Vote(loggedinUser, c, VoteType.NEGATIVE);
-                    vs.save(v);
+                    vm.makeVote(loggedinUser, c, VoteType.NEGATIVE);
                 }
             }
             else{
-                v = new Vote(loggedinUser, c, VoteType.NEGATIVE);
-                vs.save(v);
+                vm.makeVote(loggedinUser, c, VoteType.NEGATIVE);
             }
 
             cs.updateComment(proposalId, c);

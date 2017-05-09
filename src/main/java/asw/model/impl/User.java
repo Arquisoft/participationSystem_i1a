@@ -216,10 +216,6 @@ public class User {
 		Association.Propose.link(this, p);
 	}
 	
-	public void vote(Vote vote, Votable votable) {
-		Association.MakeVote.link(this, vote, votable);
-	}
-	
 	public void comment(Proposal proposal, Comment comment) {
 		Association.MakeComment.link(this, comment, proposal);
 	}

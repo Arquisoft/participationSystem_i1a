@@ -21,6 +21,7 @@ import asw.model.impl.Comment;
 import asw.model.impl.Proposal;
 import asw.model.impl.User;
 import asw.model.impl.Vote;
+import asw.model.impl.VoteMaker;
 import asw.model.types.Topic;
 import asw.model.types.VoteType;
 import asw.persistence.FillDatabase;
@@ -51,6 +52,8 @@ public class DBTest {
 	private ProposalService pS;
 	@Autowired
 	private VoteService vS;
+	@Autowired
+	private VoteMaker vm;
 	@Autowired
 	private FillDatabase fD;
 	private static FillDatabase staticFd;
@@ -150,12 +153,10 @@ public class DBTest {
 	
 	@Test
 	public void makeVoteTest() {
-        v1 = new Vote(diego, prop, VoteType.POSITIVE);
-		vS.save(v1);
+        v1 = vm.makeVote(diego, prop, VoteType.POSITIVE);
 		assertEquals(1, diego.getVotes().size());
 		assertEquals(1, prop.getScore());
-        v2 = new Vote(dani, prop, VoteType.POSITIVE);
-		vS.save(v2);
+        v2 = vm.makeVote(dani, prop, VoteType.POSITIVE);
 		assertEquals(1, dani.getVotes().size());
 		assertEquals(2, prop.getScore());
 	}
